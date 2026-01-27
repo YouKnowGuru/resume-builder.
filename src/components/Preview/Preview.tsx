@@ -3,6 +3,7 @@ import { useResumeStore } from '../../store/useResumeStore';
 import { ModernTemplate } from '../../templates/ModernTemplate';
 import { CorporateTemplate } from '../../templates/CorporateTemplate';
 import { CreativeTemplate } from '../../templates/CreativeTemplate';
+import { RoyalBhutanTemplate } from '../../templates/RoyalBhutanTemplate';
 
 export const Preview: React.FC = () => {
     const { resume } = useResumeStore();
@@ -13,6 +14,8 @@ export const Preview: React.FC = () => {
                 return <CorporateTemplate data={resume} />;
             case 'creative':
                 return <CreativeTemplate data={resume} />;
+            case 'royal-bhutan':
+                return <RoyalBhutanTemplate data={resume} />;
             case 'modern':
             default:
                 return <ModernTemplate data={resume} />;

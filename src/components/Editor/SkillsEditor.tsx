@@ -86,6 +86,11 @@ export const SkillsEditor: React.FC = () => {
              box-shadow: var(--shadow-sm);
           }
 
+          body.dark .skill-item-row {
+            background: rgba(15, 23, 42, 0.9);
+            border-color: rgba(148, 163, 184, 0.6);
+          }
+
           .skill-input-group {
             flex: 1;
             display: flex;
@@ -151,6 +156,10 @@ export const SkillsEditor: React.FC = () => {
             font-weight: 700;
             transition: all 0.2s;
             margin-top: 1rem;
+          }
+
+          body.dark .btn-add {
+            border-color: rgba(148, 163, 184, 0.6);
           }
 
           .btn-add:hover {

@@ -90,6 +90,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
           margin-top: 1rem;
           margin-left: 2rem;
           height: calc(100vh - var(--header-height) - 2rem);
+          overflow-y: auto;
         }
 
         .tab-switcher {
@@ -101,8 +102,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
 
         .tab-switcher button {
           flex: 1;
-          padding: 0.75rem;
-          font-size: 0.875rem;
+          padding: 0.6rem 0.75rem;
+          font-size: 0.85rem;
           font-weight: 600;
           border-radius: var(--radius-md);
           transition: all 0.3s;
@@ -133,7 +134,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
           display: flex;
           align-items: center;
           gap: 0.75rem;
-          padding: 0.875rem 1rem;
+          padding: 0.7rem 0.85rem;
           border-radius: var(--radius-md);
           color: var(--text-main);
           transition: all 0.3s;
@@ -142,6 +143,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
           background: rgba(255, 255, 255, 0.15);
           border: 1px solid rgba(255, 255, 255, 0.2);
           backdrop-filter: blur(8px);
+        }
+
+        .nav-item span {
+          font-size: 0.9rem;
         }
 
         .nav-item:hover {
@@ -162,6 +167,32 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
           height: 1px;
           background: var(--border);
           margin: 1rem 0;
+        }
+
+        @media (max-width: 1024px) {
+          .sidebar {
+            width: 100%;
+            margin-left: 0;
+            margin-top: 0.5rem;
+            height: calc(100vh - var(--header-height));
+            border-radius: 0 20px 20px 0;
+            background: radial-gradient(circle at 0 0, rgba(255, 215, 0, 0.25), transparent 55%),
+                        var(--bg-sidebar);
+          }
+
+          .nav-item {
+            background: rgba(15, 23, 42, 0.85);
+            border-color: rgba(148, 163, 184, 0.3);
+            color: #e5e7eb;
+          }
+
+          .nav-item span {
+            color: #e5e7eb;
+          }
+
+          .nav-item:hover {
+            background: rgba(15, 23, 42, 1);
+          }
         }
       `}</style>
     </aside>

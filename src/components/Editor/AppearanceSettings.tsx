@@ -8,6 +8,7 @@ export const AppearanceSettings: React.FC = () => {
     { id: 'modern', name: 'Modern Minimal', color: '#6366f1' },
     { id: 'corporate', name: 'Professional Corporate', color: '#1e293b' },
     { id: 'creative', name: 'Creative Bold', color: '#ec4899' },
+    { id: 'royal-bhutan', name: 'Royal Bhutan', color: '#D97706' },
   ];
 
   const colors = [

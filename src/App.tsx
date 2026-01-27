@@ -58,8 +58,13 @@ function App() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <span className="logo-icon">🐉</span>
-                <h1>Our Store</h1>
+                <div className="logo-mark">
+                  <span className="logo-glyph">༄</span>
+                </div>
+                <div className="logo-text">
+                  <h1>Druk Résumé Studio</h1>
+                  <p>Bhutanese-inspired, job-ready resumes</p>
+                </div>
               </motion.div>
               <div className="header-actions">
                 <motion.button
@@ -113,13 +118,10 @@ function App() {
           </header>
 
           <main className="main-content">
-            {(isMobileMenuOpen || !isPreviewOpen) && (
+            {!isPreviewOpen && !showMobilePreview && (
               <motion.div
                 initial={false}
-                animate={{
-                  x: (isMobileMenuOpen || window.innerWidth > 1024) ? 0 : -320,
-                  opacity: (isMobileMenuOpen || window.innerWidth > 1024) ? 1 : 0
-                }}
+                animate={{ opacity: isMobileMenuOpen || !isPreviewOpen ? 1 : 0 }}
                 className={`sticky-sidebar-wrapper ${isMobileMenuOpen ? 'mobile-open' : ''}`}
               >
                 <Sidebar
@@ -201,7 +203,8 @@ function App() {
           display: flex;
           flex-direction: column;
           min-height: 100vh;
-          background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+          padding-bottom: 2rem;
+          background: transparent;
         }
 
         .main-header {
@@ -228,21 +231,49 @@ function App() {
         .logo {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
+          gap: 1rem;
+          min-width: 0;
         }
 
-        .logo h1 {
-          font-size: 1.5rem;
-          font-weight: 900;
-          letter-spacing: -0.05em;
-          background: linear-gradient(135deg, #FFD700, #FF8C00);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
+        .logo-mark {
+          width: 40px;
+          height: 40px;
+          border-radius: 999px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: conic-gradient(from 180deg, var(--primary), var(--secondary), var(--accent), var(--primary));
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+          border: 2px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .logo-glyph {
+          font-size: 1.25rem;
+          color: #fff;
+        }
+
+        .logo-text {
+          display: flex;
+          flex-direction: column;
+          min-width: 0;
+        }
+
+        .logo-text h1 {
+          font-size: 1.35rem;
+          font-weight: 800;
+          letter-spacing: 0.08em;
           text-transform: uppercase;
+          color: var(--text-main);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
-        .logo-icon {
-           font-size: 1.8rem;
+        .logo-text p {
+          font-size: 0.75rem;
+          color: var(--text-muted);
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
         }
 
         .header-actions {
@@ -254,35 +285,36 @@ function App() {
           display: flex;
           flex: 1;
           position: relative;
+          max-width: 1440px;
+          margin: 0 auto;
+          width: 100%;
         }
 
         .editor-area {
-          flex: 2.5;
-          padding: 2rem;
-          max-width: 1400px;
-          min-width: 600px;
-          margin: 0;
+          flex: 1.2;
+          padding: 2rem 2.25rem 2.5rem;
+          min-width: 0;
         }
 
         .preview-area {
-          flex: 1.8;
-          padding: 2rem;
+          flex: 1;
+          padding: 2rem 2.25rem 2.5rem;
           display: flex;
           justify-content: center;
           position: relative;
-          min-width: 500px;
+          min-width: 0;
         }
 
         .preview-background-pattern {
-           position: absolute;
-           top: 0;
-           left: 0;
-           right: 0;
-           bottom: 0;
-           opacity: 0.03;
-           background-image: radial-gradient(#FF8C00 1px, transparent 1px);
-           background-size: 40px 40px;
-           pointer-events: none;
+          position: absolute;
+          inset: 0;
+          opacity: 0.12;
+          background-image:
+            radial-gradient(circle at 0% 0%, rgba(255, 215, 0, 0.35) 0, transparent 55%),
+            radial-gradient(circle at 100% 0%, rgba(213, 43, 30, 0.35) 0, transparent 55%),
+            radial-gradient(circle at 50% 100%, rgba(255, 140, 0, 0.25) 0, transparent 55%);
+          mix-blend-mode: soft-light;
+          pointer-events: none;
         }
 
         .preview-area.fullscreen {
@@ -292,18 +324,22 @@ function App() {
           right: 0;
           bottom: 0;
           z-index: 50;
-          background: rgba(244, 247, 246, 0.98);
+          background: radial-gradient(circle at 0 0, rgba(255, 215, 0, 0.12), transparent 55%),
+                      radial-gradient(circle at 100% 0, rgba(255, 140, 0, 0.12), transparent 55%),
+                      rgba(244, 247, 246, 0.98);
           overflow-y: auto;
         }
 
         .preview-container {
-          width: 210mm;
+          width: min(210mm, 100%);
           min-height: 297mm;
           background: white;
-          box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+          box-shadow: 0 20px 50px rgba(0,0,0,0.12);
           transform-origin: top center;
           z-index: 1;
-          border: 1px solid rgba(0,0,0,0.05);
+          border-radius: 18px;
+          border: 1px solid rgba(15, 23, 42, 0.06);
+          overflow: hidden;
         }
 
         .glass-light {
@@ -320,9 +356,74 @@ function App() {
         }
 
         @media (max-width: 1400px) {
-           .preview-container {
-              transform: scale(0.85);
-           }
+          .preview-container {
+            transform: scale(0.9);
+          }
+        }
+
+        @media (max-width: 1280px) {
+          .main-header {
+            margin: 0.75rem 1.25rem 0;
+            padding: 0 1.25rem;
+          }
+
+          .editor-area,
+          .preview-area {
+            padding-inline: 1.5rem;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .header-content {
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            align-items: flex-start;
+          }
+
+          .logo {
+            gap: 0.75rem;
+            flex: 1 1 auto;
+          }
+
+          .header-actions {
+            gap: 0.5rem;
+          }
+
+          .logo-mark {
+            width: 32px;
+            height: 32px;
+          }
+
+          .logo-text h1 {
+            font-size: 0.9rem;
+            letter-spacing: 0.14em;
+            max-width: 180px;
+          }
+
+          .logo-text p {
+            font-size: 0.6rem;
+            letter-spacing: 0.12em;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .main-header {
+            margin: 0.5rem 0.75rem 0;
+            padding: 0 0.75rem;
+          }
+
+          .logo-text p {
+            display: none;
+          }
+
+          .logo-text h1 {
+            max-width: 140px;
+          }
+
+          .header-actions .btn-icon {
+            width: 34px;
+            height: 34px;
+          }
         }
 
         .mobile-only { display: none; }
@@ -356,7 +457,7 @@ function App() {
 
           .editor-area {
             min-width: 100%;
-            padding: 1.5rem;
+            padding: 1.25rem 1.5rem 2rem;
           }
 
           .preview-area {
@@ -367,9 +468,10 @@ function App() {
             right: 0;
             bottom: 0;
             z-index: 150;
-            background: #f4f7f6;
+            background: radial-gradient(circle at 50% 0, rgba(255, 215, 0, 0.24), transparent 55%),
+                        #0b1120;
             min-width: 100%;
-            padding: 1rem;
+            padding: 1.25rem 0.75rem 1.25rem;
           }
 
           .preview-area.mobile-visible {
@@ -379,10 +481,10 @@ function App() {
           }
 
           .preview-container {
-             width: 100%;
-             min-height: auto;
-             transform: scale(0.6);
-             transform-origin: top center;
+            width: 100%;
+            min-height: auto;
+            transform: scale(1);
+            transform-origin: top center;
           }
 
           .mobile-export-btn {

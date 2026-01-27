@@ -1,58 +1,51 @@
 :root {
-  /* Modern Bhutanese Design System - Glassmorphism Edition */
-  --primary: #FFD700;
-  /* Bhutanese Gold */
-  --primary-hover: #FFC000;
+  /* Modern Bhutanese Design System – Druk Glass Theme */
+  --primary: #ffd700;       /* Bhutanese Gold */
+  --primary-hover: #ffc000;
   --primary-glow: rgba(255, 215, 0, 0.4);
 
-  --secondary: #FF8C00;
-  /* Bhutanese Orange */
-  --accent: #D52B1E;
-  /* Bhutanese Red */
+  --secondary: #ff8c00;     /* Bhutanese Orange */
+  --accent: #d52b1e;        /* Bhutanese Red */
 
-  /* Glass Tokens - Crystal Clear Edition */
-  --glass-bg: rgba(255, 255, 255, 0.1);
-  --glass-border: rgba(255, 255, 255, 0.2);
-  --glass-shine: rgba(255, 255, 255, 0.3);
-  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  --bg-main: #f3f4f6;
+  --bg-elevated: rgba(255, 255, 255, 0.85);
 
-  --bg-main: #f0f2f5;
-
-  --text-main: #1e293b;
-  --text-muted: #475569;
-  --border: rgba(255, 255, 255, 0.3);
+  --text-main: #111827;
+  --text-muted: #6b7280;
+  --border: rgba(148, 163, 184, 0.35);
 
   --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
   --radius-full: 9999px;
 
   --header-height: 80px;
   --sidebar-width: 320px;
+  --bg-sidebar: rgba(3, 7, 18, 0.92);
+
+  /* Glass tokens */
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.8);
+  --glass-shadow: 0 18px 45px rgba(15, 23, 42, 0.15);
 
   /* Transitions */
   --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 body.dark {
-  /* Glass Tokens - Enhanced Dark Mode (No Blue) */
-  --glass-bg: rgba(20, 20, 20, 0.4);
-  /* Neutral gray instead of blue */
-  --glass-border: rgba(255, 255, 255, 0.15);
-  /* Brighter borders */
-  --glass-shine: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  /* Neutral, cinematic dark without blue tint */
+  --glass-bg: rgba(15, 15, 15, 0.88);
+  --glass-border: rgba(148, 163, 184, 0.35);
+  --glass-shadow: 0 28px 80px rgba(0, 0, 0, 0.6);
 
-  --bg-main: #0a0a0a;
-  /* Pure dark instead of blue-tinted */
+  --bg-main: #020617;
+  --bg-elevated: rgba(15, 23, 42, 0.92);
 
-  --primary-glow: rgba(255, 215, 0, 0.2);
+  --primary-glow: rgba(255, 215, 0, 0.18);
 
-  --text-main: #f8fafc;
-  /* Much brighter text */
-  --text-muted: #cbd5e1;
-  /* Brighter muted text for visibility */
-  --border: rgba(255, 255, 255, 0.15);
+  --text-main: #e5e7eb;
+  --text-muted: #9ca3af;
+  --border: rgba(148, 163, 184, 0.45);
 }
 
 * {
@@ -68,9 +61,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--bg-main);
   background-image:
-    radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
-    radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
-    radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+    radial-gradient(circle at 0% -10%, rgba(255, 215, 0, 0.35) 0, transparent 55%),
+    radial-gradient(circle at 100% -10%, rgba(213, 43, 30, 0.22) 0, transparent 55%),
+    radial-gradient(circle at 50% 120%, rgba(255, 140, 0, 0.22) 0, transparent 60%);
   color: var(--text-main);
   overflow-x: hidden;
   overflow-y: auto;
@@ -79,16 +72,16 @@ body {
 
 body.dark {
   background-image:
-    radial-gradient(at 0% 0%, hsla(0, 0%, 8%, 1) 0, transparent 50%),
-    radial-gradient(at 50% 0%, hsla(280, 20%, 15%, 1) 0, transparent 50%),
-    radial-gradient(at 100% 0%, hsla(339, 30%, 12%, 1) 0, transparent 50%);
+    radial-gradient(circle at 0% -20%, rgba(255, 215, 0, 0.3) 0, transparent 55%),
+    radial-gradient(circle at 100% -20%, rgba(213, 43, 30, 0.28) 0, transparent 55%),
+    radial-gradient(circle at 50% 120%, rgba(255, 140, 0, 0.2) 0, transparent 60%);
 }
 
 body:not(.dark) {
   background-image:
-    radial-gradient(at 0% 0%, hsla(36, 100%, 93%, 1) 0, transparent 50%),
-    radial-gradient(at 50% 0%, hsla(210, 100%, 96%, 1) 0, transparent 50%),
-    radial-gradient(at 100% 0%, hsla(45, 100%, 91%, 1) 0, transparent 50%);
+    radial-gradient(circle at 0% -10%, rgba(255, 215, 0, 0.35) 0, transparent 55%),
+    radial-gradient(circle at 100% -10%, rgba(213, 43, 30, 0.22) 0, transparent 55%),
+    radial-gradient(circle at 50% 120%, rgba(255, 140, 0, 0.22) 0, transparent 60%);
 }
 
 /* Glass Utilities */
@@ -101,12 +94,12 @@ body:not(.dark) {
 }
 
 .glass-card {
-  background: linear-gradient(135deg, var(--glass-bg), rgba(255, 255, 255, 0.05));
+  background: linear-gradient(135deg, var(--glass-bg), rgba(255, 255, 255, 0.08));
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--glass-shadow);
   transition: transform 0.3s var(--transition), box-shadow 0.3s var(--transition);
 }
 
@@ -169,12 +162,13 @@ body:not(.dark) {
 
 /* Enhanced Form Inputs with Glassmorphism */
 button {
-  all: unset;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   font-weight: 600;
+  border: none;
+  background: none;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -281,6 +275,13 @@ label {
   border-color: rgba(255, 215, 0, 0.3);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   transform: translateY(-2px);
+}
+
+/* Skill tag contrast in dark mode (preview + creative template) */
+body.dark .skills-grid .skill-tag,
+body.dark .skills-tags .skill-bubble {
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
 }
 
 .item-header {

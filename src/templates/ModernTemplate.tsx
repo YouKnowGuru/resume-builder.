@@ -151,7 +151,7 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
         .modern-template {
           padding: 40px;
           color: #1a1a1a;
-          line-height: var(--line-spacing);
+          line-height: clamp(1.2, var(--line-spacing), 1.8);
           font-family: 'Inter', sans-serif;
           background: white;
           height: 100%;
@@ -195,7 +195,7 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
         }
 
         .resume-section {
-          margin-bottom: calc(25px * var(--line-spacing));
+          margin-bottom: calc(20px * var(--line-spacing));
         }
 
         .section-title {

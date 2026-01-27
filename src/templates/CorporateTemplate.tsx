@@ -121,7 +121,7 @@ export const CorporateTemplate: React.FC<TemplateProps> = ({ data }) => {
           background: white;
           height: 100%;
           font-size: var(--font-size);
-          line-height: var(--line-spacing);
+          line-height: clamp(1.2, var(--line-spacing), 1.8);
         }
 
         .resume-header {

@@ -145,7 +145,7 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
           color: #2d3436;
           font-family: 'Poppins', 'Inter', sans-serif;
           font-size: var(--font-size);
-          line-height: var(--line-spacing);
+          line-height: clamp(1.2, var(--line-spacing), 1.8);
           min-height: 100%;
           overflow: hidden;
         }
