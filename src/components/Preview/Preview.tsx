@@ -29,7 +29,8 @@ export const Preview: React.FC = () => {
             <style>{`
         .preview-content {
           width: 100%;
-          height: 100%;
+          height: auto;
+          min-height: 100%;
         }
       `}</style>
         </div>

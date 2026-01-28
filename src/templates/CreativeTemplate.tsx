@@ -9,6 +9,8 @@ interface TemplateProps {
 export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
     const { personal, summary, experience, education, skills, languages, certifications, footer } = data;
     const { themeColor, fontSize, spacing } = data.metadata;
+    const photoLayout = data.metadata.photoLayout || 'none';
+    const showHalfRightPhoto = photoLayout === 'half-right' && !!personal.avatar;
 
     return (
         <div
@@ -21,7 +23,7 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
         >
             <div className="sidebar-decor"></div>
 
-            <div className="main-grid">
+            <div className={`main-grid ${showHalfRightPhoto ? 'with-photo' : ''}`}>
                 <aside className="left-panel">
                     <header className="header-block">
                         <h1 className="name">{personal.fullName}</h1>
@@ -35,7 +37,7 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
                                 <Mail size={14} /> <span>{personal.email}</span>
                             </div>
                             <div className="contact-item">
-                                <Phone size={14} /> <span>{personal.phone}</span>
+                                <Phone size={14} /> <span className="phone-big">{personal.phone}</span>
                             </div>
                             <div className="contact-item">
                                 <MapPin size={14} /> <span>{personal.location}</span>
@@ -75,6 +77,11 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
                 <main className="right-panel">
                     <section className="body-section">
                         <h2 className="body-title">About Me</h2>
+                        {showHalfRightPhoto && (
+                            <div className="inline-photo">
+                                <img src={personal.avatar} alt={`${personal.fullName} photo`} />
+                            </div>
+                        )}
                         <p className="summary-text">{summary}</p>
                     </section>
 
@@ -223,6 +230,30 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
           gap: 10px;
           font-size: 0.85em;
           color: #4a5568;
+        }
+
+        .phone-big {
+          font-size: 1.05em;
+          font-weight: 800;
+          color: #1a202c;
+          white-space: nowrap;
+        }
+
+        .inline-photo {
+          float: right;
+          width: 32mm;
+          height: 42mm;
+          border-radius: 12px;
+          overflow: hidden;
+          border: 2px solid rgba(0,0,0,0.08);
+          margin: 0 0 6mm 6mm;
+        }
+
+        .inline-photo img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
         }
 
         .skill-bubble {

@@ -40,7 +40,7 @@ export const WelcomePopup = ({ onClose }: WelcomePopupProps) => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4 }}
                     >
-                        Welcome to <span className="gradient-text">Resume Builder</span>
+                        Welcome to <span className="gradient-text">Our Store</span>
                     </motion.h2>
 
                     <motion.p
@@ -248,6 +248,57 @@ export const WelcomePopup = ({ onClose }: WelcomePopupProps) => {
         .get-started-btn:hover {
           box-shadow: 0 15px 30px rgba(255, 140, 0, 0.4);
           transform: translateY(-2px);
+        }
+
+        @media (max-width: 480px) {
+          .welcome-backdrop {
+            padding: 0.75rem;
+            align-items: flex-end;
+          }
+
+          .welcome-modal {
+            width: 100%;
+            max-width: 100%;
+            padding: 1.25rem;
+            border-radius: 18px;
+            max-height: calc(100dvh - 1.5rem);
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+          }
+
+          .close-btn {
+            top: 0.75rem;
+            right: 0.75rem;
+          }
+
+          .icon-container {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            margin-bottom: 1rem;
+          }
+
+          h2 {
+            font-size: 1.35rem;
+          }
+
+          p {
+            font-size: 0.95rem;
+            margin-bottom: 1.25rem;
+          }
+
+          .features-grid {
+            margin-bottom: 1.5rem;
+          }
+
+          .feature-item {
+            padding: 0.85rem;
+          }
+
+          .get-started-btn {
+            padding: 0.9rem;
+            font-size: 1rem;
+          }
         }
       `}</style>
         </motion.div>

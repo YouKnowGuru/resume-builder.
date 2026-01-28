@@ -278,10 +278,21 @@ label {
 }
 
 /* Skill tag contrast in dark mode (preview + creative template) */
+/* Skill tags/bubbles: ensure readable text in BOTH themes (editor + preview templates) */
+.skills-grid .skill-tag,
+.skills-tags .skill-bubble {
+  background: rgba(255, 255, 255, 0.92);
+  color: #111827;
+  -webkit-text-fill-color: currentColor;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
 body.dark .skills-grid .skill-tag,
 body.dark .skills-tags .skill-bubble {
   background: rgba(15, 23, 42, 0.9);
   color: #e5e7eb;
+  -webkit-text-fill-color: currentColor;
+  border-color: rgba(148, 163, 184, 0.55);
 }
 
 .item-header {

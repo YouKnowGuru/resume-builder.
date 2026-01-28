@@ -9,10 +9,12 @@ interface TemplateProps {
 export const RoyalBhutanTemplate: React.FC<TemplateProps> = ({ data }) => {
   const { personal, summary, experience, education, skills, languages, certifications, footer } = data;
   const { themeColor, fontSize, spacing } = data.metadata;
+  const photoLayout = data.metadata.photoLayout || 'none';
+  const showHalfRightPhoto = photoLayout === 'half-right' && !!personal.avatar;
 
   return (
     <div
-      className="royal-template"
+      className={`royal-template ${showHalfRightPhoto ? 'with-photo' : ''}`}
       style={{
         '--accent-color': themeColor,
         '--font-size': `${fontSize}pt`,
@@ -37,7 +39,7 @@ export const RoyalBhutanTemplate: React.FC<TemplateProps> = ({ data }) => {
             </div>
           )}
           {personal.phone && (
-            <div className="royal-contact-item">
+            <div className="royal-contact-item phone">
               <Phone size={12} />
               <span>{personal.phone}</span>
             </div>
@@ -87,6 +89,11 @@ export const RoyalBhutanTemplate: React.FC<TemplateProps> = ({ data }) => {
       <main className="royal-main">
         <section className="royal-section">
           <h2 className="royal-section-title">Profile</h2>
+          {showHalfRightPhoto && (
+            <div className="royal-inline-photo">
+              <img src={personal.avatar} alt={`${personal.fullName} photo`} />
+            </div>
+          )}
           <p className="royal-summary">{summary}</p>
         </section>
 
@@ -172,6 +179,24 @@ export const RoyalBhutanTemplate: React.FC<TemplateProps> = ({ data }) => {
           color: #0f172a;
         }
 
+        .royal-inline-photo {
+          float: right;
+          width: 32mm;
+          height: 42mm;
+          border-radius: 12px;
+          overflow: hidden;
+          border: 2px solid rgba(15, 23, 42, 0.12);
+          background: #fff;
+          margin: 0 0 6mm 6mm;
+        }
+
+        .royal-inline-photo img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+
         .royal-sidebar {
           background: linear-gradient(180deg, #111827 0%, #1e293b 50%, #0f172a 100%);
           color: #e5e7eb;
@@ -235,6 +260,17 @@ export const RoyalBhutanTemplate: React.FC<TemplateProps> = ({ data }) => {
           align-items: center;
           gap: 6px;
           color: #cbd5f5;
+        }
+
+        .royal-contact-item.phone {
+          font-weight: 800;
+          color: #ffffff;
+        }
+
+        .royal-contact-item.phone span {
+          font-size: 1.05em;
+          letter-spacing: 0.02em;
+          white-space: nowrap;
         }
 
         .royal-sidebar-section {

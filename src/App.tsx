@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './index.css';
 import { Sidebar } from './components/Layout/Sidebar';
@@ -23,6 +23,11 @@ function App() {
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const [currentPage, setCurrentPage] = useState<PageType>('home');
   const [showWelcome, setShowWelcome] = useState(true);
+  const [previewScale, setPreviewScale] = useState(1);
+
+  const previewAreaRef = useRef<HTMLDivElement | null>(null);
+  const previewContainerRef = useRef<HTMLDivElement | null>(null);
+  const basePreviewWidthPxRef = useRef<number | null>(null);
 
   const { resume, isDarkMode, toggleDarkMode } = useResumeStore();
 
@@ -39,6 +44,44 @@ function App() {
     const filename = `${resume.personal.fullName.replace(/\s+/g, '_')}_Resume.pdf`;
     await exportToPDF('resume-preview', filename);
   };
+
+  const shouldAutoScalePreview = useMemo(() => {
+    // Only auto-scale in desktop split view. Fullscreen & mobile overlay should be 1:1.
+    return !isPreviewOpen && !showMobilePreview;
+  }, [isPreviewOpen, showMobilePreview]);
+
+  useLayoutEffect(() => {
+    if (!shouldAutoScalePreview) {
+      setPreviewScale(1);
+      return;
+    }
+
+    const area = previewAreaRef.current;
+    const container = previewContainerRef.current;
+    if (!area || !container) return;
+
+    const update = () => {
+      // Measure the "paper" width at scale=1 once, then reuse.
+      if (!basePreviewWidthPxRef.current) {
+        const prevTransform = container.style.transform;
+        container.style.transform = 'none';
+        basePreviewWidthPxRef.current = container.getBoundingClientRect().width;
+        container.style.transform = prevTransform;
+      }
+
+      const baseWidth = basePreviewWidthPxRef.current || container.getBoundingClientRect().width || 1;
+      // Leave some breathing room for padding and shadows inside the preview area.
+      const available = Math.max(0, area.clientWidth - 24);
+      const nextScale = Math.min(1, available / baseWidth);
+      setPreviewScale(Number.isFinite(nextScale) && nextScale > 0 ? nextScale : 1);
+    };
+
+    update();
+    const ro = new ResizeObserver(() => update());
+    ro.observe(area);
+
+    return () => ro.disconnect();
+  }, [shouldAutoScalePreview]);
 
   return (
     <div className="app-container">
@@ -62,7 +105,7 @@ function App() {
                   <span className="logo-glyph">༄</span>
                 </div>
                 <div className="logo-text">
-                  <h1>Druk Résumé Studio</h1>
+                  <h1>Our Store</h1>
                   <p>Bhutanese-inspired, job-ready resumes</p>
                 </div>
               </motion.div>
@@ -151,14 +194,19 @@ function App() {
 
             <motion.div
               className={`preview-area ${isPreviewOpen ? 'fullscreen' : ''} ${showMobilePreview ? 'mobile-visible' : ''}`}
-              animate={{ flex: isPreviewOpen ? 10 : 1.5 }}
+              animate={{ flex: isPreviewOpen ? 10 : 1.0 }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              ref={previewAreaRef as any}
             >
               <div className="preview-background-pattern"></div>
               <motion.div
                 id="resume-preview"
                 className="preview-container"
                 layout
+                ref={previewContainerRef as any}
+                style={{
+                  transform: `scale(${previewScale})`,
+                }}
               >
                 <Preview />
               </motion.div>
@@ -191,6 +239,8 @@ function App() {
           border: 1px solid var(--border);
           color: var(--text-main);
           transition: var(--transition);
+          flex: 0 0 auto;
+          touch-action: manipulation;
         }
 
         .btn-icon:hover {
@@ -203,7 +253,7 @@ function App() {
           display: flex;
           flex-direction: column;
           min-height: 100vh;
-          padding-bottom: 2rem;
+          padding-bottom: 0;
           background: transparent;
         }
 
@@ -217,6 +267,8 @@ function App() {
           z-index: 100;
           margin: 1rem 2rem 0;
           border-radius: var(--radius-lg);
+          /* iOS notch / Android cutout */
+          padding-top: env(safe-area-inset-top);
         }
 
         .header-content {
@@ -226,6 +278,7 @@ function App() {
           align-items: center;
           max-width: 1600px;
           margin: 0 auto;
+          min-width: 0;
         }
 
         .logo {
@@ -279,6 +332,9 @@ function App() {
         .header-actions {
           display: flex;
           gap: 1rem;
+          align-items: center;
+          flex: 0 0 auto;
+          min-width: 0;
         }
 
         .main-content {
@@ -291,13 +347,13 @@ function App() {
         }
 
         .editor-area {
-          flex: 1.2;
+          flex: 1.75;
           padding: 2rem 2.25rem 2.5rem;
           min-width: 0;
         }
 
         .preview-area {
-          flex: 1;
+          flex: 0.9;
           padding: 2rem 2.25rem 2.5rem;
           display: flex;
           justify-content: center;
@@ -328,6 +384,7 @@ function App() {
                       radial-gradient(circle at 100% 0, rgba(255, 140, 0, 0.12), transparent 55%),
                       rgba(244, 247, 246, 0.98);
           overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
         }
 
         .preview-container {
@@ -355,11 +412,7 @@ function App() {
           z-index: 90;
         }
 
-        @media (max-width: 1400px) {
-          .preview-container {
-            transform: scale(0.9);
-          }
-        }
+        /* Preview scaling is handled dynamically in JS so it always fits the available panel width */
 
         @media (max-width: 1280px) {
           .main-header {
@@ -374,19 +427,28 @@ function App() {
         }
 
         @media (max-width: 768px) {
+          .main-header {
+            /* Allow header to grow if needed instead of clipping when space is tight */
+            height: auto;
+            min-height: var(--header-height);
+            padding-block: 0.5rem;
+          }
+
           .header-content {
-            gap: 0.75rem;
-            flex-wrap: wrap;
-            align-items: flex-start;
+            gap: 0.5rem;
+            flex-wrap: nowrap;
+            align-items: center;
           }
 
           .logo {
             gap: 0.75rem;
             flex: 1 1 auto;
+            min-width: 0;
           }
 
           .header-actions {
             gap: 0.5rem;
+            flex-wrap: nowrap;
           }
 
           .logo-mark {
@@ -395,9 +457,9 @@ function App() {
           }
 
           .logo-text h1 {
-            font-size: 0.9rem;
-            letter-spacing: 0.14em;
-            max-width: 180px;
+            font-size: clamp(0.85rem, 2.8vw, 0.95rem);
+            letter-spacing: 0.12em;
+            max-width: 12.5rem;
           }
 
           .logo-text p {
@@ -417,12 +479,27 @@ function App() {
           }
 
           .logo-text h1 {
-            max-width: 140px;
+            max-width: 10.5rem;
           }
 
           .header-actions .btn-icon {
             width: 34px;
             height: 34px;
+          }
+
+          .header-actions {
+            gap: 0.35rem;
+          }
+        }
+
+        @media (max-width: 360px) {
+          .logo-text h1 {
+            max-width: 9rem;
+          }
+
+          .header-actions .btn-icon {
+            width: 32px;
+            height: 32px;
           }
         }
 
@@ -477,13 +554,15 @@ function App() {
           .preview-area.mobile-visible {
             display: flex;
             flex-direction: column;
+            height: calc(100dvh - var(--header-height));
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
           }
 
           .preview-container {
             width: 100%;
             min-height: auto;
-            transform: scale(1);
             transform-origin: top center;
           }
 

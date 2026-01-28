@@ -54,6 +54,7 @@ interface ResumeStore {
     setThemeColor: (color: string) => void;
     setFontSize: (size: number) => void;
     setSpacing: (spacing: number) => void;
+    setPhotoLayout: (layout: 'none' | 'half-right') => void;
 
     // App Theme
     isDarkMode: boolean;
@@ -254,12 +255,19 @@ export const useResumeStore = create<ResumeStore>()(
                 }
             })),
 
+            setPhotoLayout: (photoLayout: 'none' | 'half-right') => set((state: ResumeStore) => ({
+                resume: {
+                    ...state.resume,
+                    metadata: { ...state.resume.metadata, photoLayout }
+                }
+            })),
+
             isDarkMode: false,
             toggleDarkMode: () => set((state) => ({ isDarkMode: !state.isDarkMode })),
         }),
         {
             name: 'resume-storage',
-            version: 1,
+            version: 2,
             migrate: (persistedState: any, version: number) => {
                 if (version === 0) {
                     // Migration from version 0 to 1
@@ -274,6 +282,19 @@ export const useResumeStore = create<ResumeStore>()(
                                 spacing: persistedState.resume.metadata.spacing || 1.0,
                             }
                         }
+                    };
+                }
+                if (version === 1) {
+                    // Migration from version 1 to 2: add photoLayout default
+                    return {
+                        ...persistedState,
+                        resume: {
+                            ...persistedState.resume,
+                            metadata: {
+                                ...persistedState.resume.metadata,
+                                photoLayout: persistedState.resume.metadata.photoLayout || 'none',
+                            },
+                        },
                     };
                 }
                 return persistedState;

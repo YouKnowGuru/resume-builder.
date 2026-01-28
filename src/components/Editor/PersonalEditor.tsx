@@ -4,7 +4,7 @@ import { EditorSection } from './EditorSection';
 import { useResumeStore } from '../../store/useResumeStore';
 
 export const PersonalEditor: React.FC = () => {
-    const { resume, updatePersonal } = useResumeStore();
+    const { resume, updatePersonal, setPhotoLayout } = useResumeStore();
     const { personal } = resume;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -12,9 +12,62 @@ export const PersonalEditor: React.FC = () => {
         updatePersonal({ [name]: value });
     };
 
+    const handleAvatarUpload = async (file?: File | null) => {
+        if (!file) return;
+        if (!file.type.startsWith('image/')) return;
+
+        // Store as data URL so preview/export works without external hosting.
+        const dataUrl = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(String(reader.result || ''));
+            reader.onerror = () => reject(new Error('Failed to read image'));
+            reader.readAsDataURL(file);
+        });
+
+        updatePersonal({ avatar: dataUrl });
+        // Convenience: if user uploads a photo, enable the half-right layout by default.
+        setPhotoLayout('half-right');
+    };
+
     return (
         <EditorSection title="Personal Information" icon={User}>
             <div className="form-grid">
+                <div className="form-group full-width">
+                    <label>Photo (optional)</label>
+                    <div className="avatar-row">
+                        <div className="avatar-preview" aria-label="Photo preview">
+                            {personal.avatar ? (
+                                <img src={personal.avatar} alt="Profile photo" />
+                            ) : (
+                                <span className="avatar-placeholder">No photo</span>
+                            )}
+                        </div>
+
+                        <div className="avatar-actions">
+                            <label className="btn-outline avatar-upload">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) => handleAvatarUpload(e.target.files?.[0])}
+                                />
+                                Upload photo
+                            </label>
+                            {personal.avatar && (
+                                <button
+                                    type="button"
+                                    className="btn-outline avatar-remove"
+                                    onClick={() => updatePersonal({ avatar: undefined })}
+                                >
+                                    Remove
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                    <small className="help-text">
+                        Tip: use a clear headshot; it will be placed on the right when “Half photo” is enabled.
+                    </small>
+                </div>
+
                 <div className="form-group full-width">
                     <label>Full Name</label>
                     <input
@@ -108,6 +161,59 @@ export const PersonalEditor: React.FC = () => {
 
         .form-group.full-width {
           grid-column: 1 / -1;
+        }
+
+        .avatar-row {
+          display: flex;
+          gap: 1rem;
+          align-items: center;
+          flex-wrap: wrap;
+        }
+
+        .avatar-preview {
+          width: 84px;
+          height: 84px;
+          border-radius: 14px;
+          background: rgba(255, 255, 255, 0.6);
+          border: 1px solid var(--border);
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex: 0 0 auto;
+        }
+
+        body.dark .avatar-preview {
+          background: rgba(20, 20, 20, 0.5);
+        }
+
+        .avatar-preview img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+
+        .avatar-placeholder {
+          font-size: 0.75rem;
+          font-weight: 700;
+          color: var(--text-muted);
+        }
+
+        .avatar-actions {
+          display: flex;
+          gap: 0.75rem;
+          flex-wrap: wrap;
+          align-items: center;
+        }
+
+        .avatar-upload input[type="file"] {
+          display: none;
+        }
+
+        .help-text {
+          color: var(--text-muted);
+          font-size: 0.75rem;
         }
 
         .form-group label {

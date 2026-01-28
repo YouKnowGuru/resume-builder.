@@ -8,6 +8,8 @@ interface TemplateProps {
 export const CorporateTemplate: React.FC<TemplateProps> = ({ data }) => {
   const { personal, summary, experience, education, skills, languages, certifications, footer } = data;
   const { themeColor, fontSize, spacing } = data.metadata;
+  const photoLayout = data.metadata.photoLayout || 'none';
+  const showHalfRightPhoto = photoLayout === 'half-right' && !!personal.avatar;
 
   return (
     <div
@@ -17,15 +19,20 @@ export const CorporateTemplate: React.FC<TemplateProps> = ({ data }) => {
         '--line-spacing': spacing
       } as any}
     >
-      <header className="resume-header" style={{ borderTop: `8px solid ${themeColor}` }}>
+      <header className={`resume-header ${showHalfRightPhoto ? 'with-photo' : ''}`} style={{ borderTop: `8px solid ${themeColor}` }}>
         <div className="header-main">
           <h1 className="name">{personal.fullName}</h1>
           <p className="title">{personal.title}</p>
         </div>
         <div className="contact-grid">
-          <p>{personal.location} | {personal.phone} | {personal.email}</p>
+          <p>{personal.location} | <span className="phone-big">{personal.phone}</span> | {personal.email}</p>
           <p>{personal.linkedin} | {personal.website} | {personal.github}</p>
         </div>
+        {showHalfRightPhoto && (
+          <div className="header-photo">
+            <img src={personal.avatar} alt={`${personal.fullName} photo`} />
+          </div>
+        )}
       </header>
 
       <div className="resume-content">
@@ -128,6 +135,37 @@ export const CorporateTemplate: React.FC<TemplateProps> = ({ data }) => {
           text-align: center;
           margin-bottom: 30px;
           padding-top: 20px;
+        }
+
+        .resume-header.with-photo {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 10mm;
+          text-align: left;
+        }
+
+        .header-photo {
+          width: 32mm;
+          height: 42mm;
+          border-radius: 12px;
+          overflow: hidden;
+          border: 2px solid rgba(0,0,0,0.12);
+          background: #fff;
+          flex: 0 0 auto;
+        }
+
+        .header-photo img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+
+        .phone-big {
+          font-size: 1.05em;
+          font-weight: 800;
+          white-space: nowrap;
         }
 
         .name {

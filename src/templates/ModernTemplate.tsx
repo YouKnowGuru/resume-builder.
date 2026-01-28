@@ -9,6 +9,8 @@ interface TemplateProps {
 export const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
   const { personal, summary, experience, education, skills, languages, certifications, footer } = data;
   const { themeColor, fontSize, spacing } = data.metadata;
+  const photoLayout = data.metadata.photoLayout || 'none';
+  const showHalfRightPhoto = photoLayout === 'half-right' && !!personal.avatar;
 
   return (
     <div
@@ -19,36 +21,44 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
         '--line-spacing': spacing
       } as any}
     >
-      <header className="resume-header">
-        <h1 className="name">{personal.fullName}</h1>
-        <p className="title">{personal.title}</p>
+      <header className={`resume-header ${showHalfRightPhoto ? 'with-photo' : ''}`}>
+        <div className="header-left">
+          <h1 className="name">{personal.fullName}</h1>
+          <p className="title">{personal.title}</p>
 
-        <div className="contact-info">
-          {personal.email && (
-            <div className="info-item">
-              <Mail size={14} />
-              <span>{personal.email}</span>
-            </div>
-          )}
-          {personal.phone && (
-            <div className="info-item">
-              <Phone size={14} />
-              <span>{personal.phone}</span>
-            </div>
-          )}
-          {personal.location && (
-            <div className="info-item">
-              <MapPin size={14} />
-              <span>{personal.location}</span>
-            </div>
-          )}
-          {personal.website && (
-            <div className="info-item">
-              <Globe size={14} />
-              <span>{personal.website}</span>
-            </div>
-          )}
+          <div className="contact-info">
+            {personal.email && (
+              <div className="info-item">
+                <Mail size={14} />
+                <span>{personal.email}</span>
+              </div>
+            )}
+            {personal.phone && (
+              <div className="info-item info-phone">
+                <Phone size={14} />
+                <span className="phone-big">{personal.phone}</span>
+              </div>
+            )}
+            {personal.location && (
+              <div className="info-item">
+                <MapPin size={14} />
+                <span>{personal.location}</span>
+              </div>
+            )}
+            {personal.website && (
+              <div className="info-item">
+                <Globe size={14} />
+                <span>{personal.website}</span>
+              </div>
+            )}
+          </div>
         </div>
+
+        {showHalfRightPhoto && (
+          <div className="header-photo">
+            <img src={personal.avatar} alt={`${personal.fullName} photo`} />
+          </div>
+        )}
       </header>
 
       <div className="resume-content">
@@ -164,6 +174,34 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
           margin-bottom: 30px;
         }
 
+        .resume-header.with-photo {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 10mm;
+        }
+
+        .header-left {
+          min-width: 0;
+          flex: 1 1 auto;
+        }
+
+        .header-photo {
+          width: 32mm;
+          height: 42mm;
+          border-radius: 12px;
+          overflow: hidden;
+          border: 2px solid rgba(0,0,0,0.08);
+          flex: 0 0 auto;
+        }
+
+        .header-photo img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+
         .name {
           font-size: 2.2em;
           font-weight: 800;
@@ -192,6 +230,17 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
           display: flex;
           align-items: center;
           gap: 5px;
+        }
+
+        .info-item.info-phone {
+          font-weight: 800;
+          color: #111;
+        }
+
+        .phone-big {
+          font-size: 1.05em;
+          letter-spacing: 0.01em;
+          white-space: nowrap;
         }
 
         .resume-section {

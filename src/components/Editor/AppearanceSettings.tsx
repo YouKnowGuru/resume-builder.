@@ -2,7 +2,7 @@ import React from 'react';
 import { useResumeStore } from '../../store/useResumeStore';
 
 export const AppearanceSettings: React.FC = () => {
-  const { resume, setTemplate, setThemeColor, setFontSize, setSpacing } = useResumeStore();
+  const { resume, setTemplate, setThemeColor, setFontSize, setSpacing, setPhotoLayout } = useResumeStore();
 
   const templates = [
     { id: 'modern', name: 'Modern Minimal', color: '#6366f1' },
@@ -19,6 +19,7 @@ export const AppearanceSettings: React.FC = () => {
   // Safety checks for persisted metadata (handling migrations from string to number)
   const safeFontSize = typeof resume.metadata.fontSize === 'number' ? resume.metadata.fontSize : 11;
   const safeSpacing = typeof resume.metadata.spacing === 'number' ? resume.metadata.spacing : 1.0;
+  const safePhotoLayout = resume.metadata.photoLayout || 'none';
 
   return (
     <div id="editor-appearance" className="appearance-settings animate-fade-in">
@@ -82,6 +83,22 @@ export const AppearanceSettings: React.FC = () => {
           onChange={(e) => setSpacing(parseFloat(e.target.value))}
           className="settings-slider"
         />
+      </section>
+
+      <section className="settings-section">
+        <h3>Photo</h3>
+        <div className="photo-row">
+          <label className="photo-label">Layout</label>
+          <select
+            className="photo-select"
+            value={safePhotoLayout}
+            onChange={(e) => setPhotoLayout(e.target.value as 'none' | 'half-right')}
+          >
+            <option value="none">No photo</option>
+            <option value="half-right">Half photo (right)</option>
+          </select>
+        </div>
+        <p className="photo-hint">Upload a photo in Personal Info to use this.</p>
       </section>
 
       <style>{`
@@ -212,6 +229,38 @@ export const AppearanceSettings: React.FC = () => {
           border-color: var(--text-main);
           transform: scale(1.25);
           box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .photo-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+        }
+
+        .photo-label {
+          font-size: 0.875rem;
+          font-weight: 700;
+          color: var(--text-muted);
+        }
+
+        .photo-select {
+          min-width: 220px;
+          padding: 0.75rem 1rem;
+          border-radius: var(--radius-md);
+          border: 1px solid var(--border);
+          background: rgba(255, 255, 255, 0.6);
+          color: var(--text-main);
+        }
+
+        body.dark .photo-select {
+          background: rgba(20, 20, 20, 0.5);
+        }
+
+        .photo-hint {
+          margin-top: 0.75rem;
+          color: var(--text-muted);
+          font-size: 0.75rem;
         }
       `}</style>
     </div>

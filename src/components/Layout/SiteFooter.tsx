@@ -23,20 +23,20 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onNavigate }) => {
                 <div className="footer-links-container">
                     <div className="link-group">
                         <h3>Product</h3>
-                        <a href="#">Templates</a>
-                        <a href="#">AI Assistant</a>
-                        <a href="#">Export PDF</a>
+                        <a href="#" className="footer-link">Templates</a>
+                        <a href="#" className="footer-link">AI Assistant</a>
+                        <a href="#" className="footer-link">Export PDF</a>
                     </div>
                     <div className="link-group">
                         <h3>Resources</h3>
-                        <a href="#">Resume Tips</a>
-                        <a href="#">Career Blog</a>
-                        <a href="#">Documentation</a>
+                        <a href="#" className="footer-link">Resume Tips</a>
+                        <a href="#" className="footer-link">Career Blog</a>
+                        <a href="#" className="footer-link">Documentation</a>
                     </div>
                     <div className="link-group">
                         <h3>Legal</h3>
-                        <a onClick={() => onNavigate('privacy')} style={{ cursor: 'pointer' }}>Privacy Policy</a>
-                        <a onClick={() => onNavigate('terms')} style={{ cursor: 'pointer' }}>Terms of Service</a>
+                        <button type="button" className="footer-link footer-link-btn" onClick={() => onNavigate('privacy')}>Privacy Policy</button>
+                        <button type="button" className="footer-link footer-link-btn" onClick={() => onNavigate('terms')}>Terms of Service</button>
                     </div>
                 </div>
 
@@ -66,8 +66,8 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onNavigate }) => {
 
             <style>{`
                 .site-footer {
-                    margin-top: 4rem;
-                    padding: 4rem 2rem 2rem 2rem;
+                    margin-top: 2.25rem;
+                    padding: 2.5rem 2rem 1.25rem;
                     color: var(--text-main);
                     z-index: 10;
                     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
@@ -79,8 +79,8 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onNavigate }) => {
                     margin: 0 auto;
                     display: grid;
                     grid-template-columns: 1.5fr 2fr 1fr;
-                    gap: 4rem;
-                    margin-bottom: 4rem;
+                    gap: 2.5rem;
+                    margin-bottom: 1.75rem;
                 }
 
                 .logo-small {
@@ -108,7 +108,7 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onNavigate }) => {
 
                 .footer-links-container {
                     display: flex;
-                    gap: 4rem;
+                    gap: 2.5rem;
                 }
 
                 .link-group h3, .footer-social h3 {
@@ -126,15 +126,28 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onNavigate }) => {
                     gap: 0.75rem;
                 }
 
-                .link-group a {
+                .footer-link {
                     text-decoration: none;
                     color: var(--text-muted);
                     font-size: 0.9375rem;
-                    transition: color 0.2s;
+                    transition: color 0.2s, transform 0.2s;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.5rem;
                 }
 
-                .link-group a:hover {
+                .footer-link:hover {
                     color: var(--primary);
+                    transform: translateX(2px);
+                }
+
+                .footer-link-btn {
+                    padding: 0;
+                    border: 0;
+                    background: transparent;
+                    text-align: left;
+                    cursor: pointer;
+                    font-weight: 600;
                 }
 
                 .social-icons {
@@ -155,7 +168,7 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onNavigate }) => {
                 .footer-bottom {
                     max-width: 1600px;
                     margin: 0 auto;
-                    padding-top: 2rem;
+                    padding-top: 1.25rem;
                     border-top: 1px solid var(--border);
                     display: flex;
                     justify-content: space-between;
@@ -177,17 +190,38 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onNavigate }) => {
                 }
 
                 @media (max-width: 768px) {
+                    .site-footer {
+                        margin-top: 1.75rem;
+                        padding: 2rem 1.5rem 1rem;
+                    }
                     .footer-content {
                         grid-template-columns: 1fr;
-                        gap: 2rem;
+                        gap: 1.75rem;
                     }
                     .footer-links-container {
-                        gap: 2rem;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        gap: 1.5rem;
                     }
                     .footer-bottom {
                         flex-direction: column;
-                        gap: 1rem;
+                        gap: 0.75rem;
                         text-align: center;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .site-footer {
+                        padding: 1.75rem 1.1rem 0.9rem;
+                    }
+                    .footer-content {
+                        gap: 1.5rem;
+                    }
+                    .footer-links-container {
+                        gap: 1.25rem;
+                    }
+                    .footer-bottom {
+                        font-size: 0.8rem;
                     }
                 }
             `}</style>

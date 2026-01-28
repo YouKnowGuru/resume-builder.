@@ -87,6 +87,7 @@ export const initialResumeState: ResumeData = {
         fontFamily: 'Inter',
         fontSize: 11,
         spacing: 1.0,
+        photoLayout: 'none',
         updatedAt: Date.now(),
     }
 };
