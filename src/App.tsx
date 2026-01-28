@@ -13,6 +13,7 @@ import { useResumeStore } from './store/useResumeStore';
 import { exportToPDF } from './utils/pdfExport';
 import { Moon, Sun, Menu, X, Eye } from 'lucide-react';
 import { WelcomePopup } from './components/Layout/WelcomePopup';
+import { FloatingChatAssistant } from './components/Layout/FloatingChatAssistant';
 
 type PageType = 'home' | 'privacy' | 'terms';
 
@@ -224,6 +225,7 @@ function App() {
           <AnimatePresence>
             {showWelcome && <WelcomePopup onClose={() => setShowWelcome(false)} />}
           </AnimatePresence>
+          <FloatingChatAssistant />
         </>
       )}
 
@@ -554,7 +556,6 @@ function App() {
           .preview-area.mobile-visible {
             display: flex;
             flex-direction: column;
-            height: calc(100dvh - var(--header-height));
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             overscroll-behavior: contain;

@@ -1,3 +1,5 @@
+type SuggestionType = 'summary' | 'bullet-point' | 'chat';
+
 export class GrokAPI {
     private apiKey: string;
     private baseURL = 'https://api.apifree.ai/v1/chat/completions';
@@ -6,8 +8,8 @@ export class GrokAPI {
         this.apiKey = apiKey;
     }
 
-    async generateSuggestion(type: 'summary' | 'bullet-point', context?: string): Promise<string> {
-        const prompts = {
+    async generateSuggestion(type: SuggestionType, context?: string): Promise<string> {
+        const prompts: Record<SuggestionType, string> = {
             summary: `You are a professional resume writer. Generate a compelling professional summary (2-3 sentences) for a resume. 
 The summary should be:
 - Results-oriented and achievement-focused
@@ -25,7 +27,22 @@ The bullet point should:
 - Be concise (1-2 lines)
 ${context ? `Context: ${context}` : ''}
 
-Generate only the bullet point text, no additional commentary.`
+Generate only the bullet point text, no additional commentary.`,
+            chat: `You are an expert career coach and resume-writing assistant embedded inside a resume builder web app.
+Answer the user's question in a friendly, concise way. 
+You can help with:
+- Writing or improving resume content (any section)
+- Optimizing resumes for specific jobs
+- General job search and interview questions
+- Explaining how to use features in this resume builder
+
+User question: ${context ?? ''}
+
+Important:
+- Do NOT ask "Need help with your professional summary?" in your reply.
+- Do NOT repeat the question back verbatim unless it helps your explanation.
+- Keep answers short and scannable (2–5 short paragraphs or bullet points).
+- Never output code; the user is not a developer here.`
         };
 
         const requestBody = {
@@ -80,12 +97,17 @@ Generate only the bullet point text, no additional commentary.`
         }
     }
 
-    private getMockData(type: 'summary' | 'bullet-point'): string {
+    private getMockData(type: SuggestionType): string {
         if (type === 'summary') {
             return "Dedicated software engineer with 5+ years of experience in full-stack development. Expert in React, TypeScript, and Node.js with a strong focus on building scalable web applications and delivering high-quality user experiences.";
-        } else {
+        }
+
+        if (type === 'bullet-point') {
             return "Engineered a new automated testing framework that reduced release cycle time by 40% and improved code coverage from 65% to 92% across the entire microservices architecture.";
         }
+
+        // Mock chat-style answer
+        return "You can start by focusing on your most recent, relevant experience and highlighting measurable results. If you tell me your target role and paste your current resume text, I can help you rewrite it for better impact.";
     }
 }
 

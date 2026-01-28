@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Github, Twitter, Linkedin, Heart } from 'lucide-react';
+import { Github, Twitter, Linkedin, Heart, Instagram, Facebook, Youtube, Mail } from 'lucide-react';
 
 interface SiteFooterProps {
     onNavigate: (page: 'home' | 'privacy' | 'terms') => void;
@@ -43,9 +43,13 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onNavigate }) => {
                 <div className="footer-social">
                     <h3>Connect</h3>
                     <div className="social-icons">
-                        <a href="#" aria-label="GitHub"><Github size={20} /></a>
-                        <a href="#" aria-label="Twitter"><Twitter size={20} /></a>
-                        <a href="#" aria-label="LinkedIn"><Linkedin size={20} /></a>
+                        <a href="#" aria-label="GitHub" className="social-link"><Github size={20} /></a>
+                        <a href="#" aria-label="Twitter" className="social-link"><Twitter size={20} /></a>
+                        <a href="#" aria-label="LinkedIn" className="social-link"><Linkedin size={20} /></a>
+                        <a href="#" aria-label="Instagram" className="social-link"><Instagram size={20} /></a>
+                        <a href="#" aria-label="Facebook" className="social-link"><Facebook size={20} /></a>
+                        <a href="#" aria-label="YouTube" className="social-link"><Youtube size={20} /></a>
+                        <a href="mailto:hello@ourstore.com" aria-label="Email" className="social-link"><Mail size={20} /></a>
                     </div>
                 </div>
             </div>
@@ -152,17 +156,28 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onNavigate }) => {
 
                 .social-icons {
                     display: flex;
-                    gap: 1.25rem;
+                    flex-wrap: wrap;
+                    gap: 0.8rem;
                 }
 
-                .social-icons a {
+                .social-link {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 999px;
+                    border: 1px solid rgba(148, 163, 184, 0.4);
                     color: var(--text-muted);
+                    background: rgba(255, 255, 255, 0.7);
                     transition: all 0.2s;
                 }
 
-                .social-icons a:hover {
+                .social-link:hover {
                     color: var(--primary);
-                    transform: translateY(-3px);
+                    border-color: var(--primary);
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
                 }
 
                 .footer-bottom {
@@ -197,11 +212,28 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onNavigate }) => {
                     .footer-content {
                         grid-template-columns: 1fr;
                         gap: 1.75rem;
+                        text-align: center;
+                        align-items: center;
                     }
                     .footer-links-container {
                         flex-direction: column;
-                        align-items: flex-start;
+                        align-items: center;
                         gap: 1.5rem;
+                    }
+                    .logo-small {
+                        justify-content: center;
+                    }
+                    .brand-tagline {
+                        max-width: 100%;
+                    }
+                    .link-group {
+                        align-items: center;
+                    }
+                    .footer-social {
+                        text-align: center;
+                    }
+                    .social-icons {
+                        justify-content: center;
                     }
                     .footer-bottom {
                         flex-direction: column;

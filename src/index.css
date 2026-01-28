@@ -295,6 +295,15 @@ body.dark .skills-tags .skill-bubble {
   border-color: rgba(148, 163, 184, 0.55);
 }
 
+/* Corporate-style bullet skills: keep text visible in both themes */
+.skills-grid .skill-item {
+  color: #111827;
+}
+
+body.dark .skills-grid .skill-item {
+  color: #e5e7eb;
+}
+
 .item-header {
   display: flex;
   justify-content: space-between;

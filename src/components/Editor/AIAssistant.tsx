@@ -36,7 +36,11 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({ type, onApply }) => {
 
       {!suggestion ? (
         <div className="ai-prompt">
-          <p>Need help with your {type === 'summary' ? 'professional summary' : 'achievements'}?</p>
+          <p>
+            Smart help for your{' '}
+            {type === 'summary' ? 'professional summary' : 'experience bullets'} — let AI draft a first version
+            and then you can tweak it.
+          </p>
           {error && (
             <div className="error-message">
               <AlertCircle size={14} />
