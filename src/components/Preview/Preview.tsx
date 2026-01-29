@@ -6,7 +6,7 @@ import { CreativeTemplate } from '../../templates/CreativeTemplate';
 import { RoyalBhutanTemplate } from '../../templates/RoyalBhutanTemplate';
 import { WatermarkOverlay } from './WatermarkOverlay';
 
-export const Preview: React.FC = () => {
+export const Preview: React.FC<{ showWatermark?: boolean }> = ({ showWatermark = false }) => {
     const { resume } = useResumeStore();
 
     useEffect(() => {
@@ -64,7 +64,6 @@ export const Preview: React.FC = () => {
     return (
         <div className="preview-content restricted-area">
             {renderTemplate()}
-            <WatermarkOverlay />
 
             <style>{`
         .preview-content {

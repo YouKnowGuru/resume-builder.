@@ -1,13 +1,15 @@
 import React from 'react';
 
-export const WatermarkOverlay: React.FC = () => {
+export const WatermarkOverlay: React.FC<{ isVisible?: boolean }> = ({ isVisible = false }) => {
+    if (!isVisible) return null;
+
     return (
         <div className="watermark-overlay">
             {Array.from({ length: 20 }).map((_, rowIndex) => (
                 <div key={rowIndex} className="watermark-row">
                     {Array.from({ length: 10 }).map((_, colIndex) => (
                         <div key={colIndex} className="watermark-item">
-                            PREVIEW - DO NOT COPY
+                            DEBUG WATERMARK - IF YOU SEE THIS, APP IS UPDATING
                         </div>
                     ))}
                 </div>

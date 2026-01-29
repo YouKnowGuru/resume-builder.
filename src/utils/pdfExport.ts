@@ -35,6 +35,12 @@ export const exportToPDF = async (elementId: string, filename: string) => {
                         current.style.overflow = 'visible';
                         current = current.parentElement;
                     }
+
+                    // Hide watermarks during export
+                    const watermarks = clonedDoc.querySelectorAll('.watermark-overlay, .preview-watermark');
+                    watermarks.forEach(el => {
+                        (el as HTMLElement).style.display = 'none';
+                    });
                 }
             }
         });

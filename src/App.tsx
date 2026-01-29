@@ -189,6 +189,9 @@ function App() {
         <>
           <header className="main-header glass-panel">
             <div className="header-content">
+              <div style={{ background: 'red', color: 'white', padding: '10px', fontSize: '20px', fontWeight: 'bold', position: 'fixed', top: 0, left: 0, right: 0, zIndex: 10000 }}>
+                DEBUG: APP IS UPDATING
+              </div>
               <motion.div
                 className="logo"
                 initial={{ opacity: 0, x: -20 }}
@@ -372,7 +375,7 @@ function App() {
                   transform: `scale(${previewScale})`,
                 }}
               >
-                <Preview />
+                <Preview showWatermark={isPreviewOpen || showMobilePreview} />
               </motion.div>
               {showMobilePreview && (
                 <button className="mobile-export-btn btn-primary mobile-only" onClick={handleExport}>
