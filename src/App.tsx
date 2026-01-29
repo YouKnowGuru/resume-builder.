@@ -41,6 +41,99 @@ function App() {
     }
   }, [isDarkMode]);
 
+  // Enhanced screenshot protection for fullscreen preview
+  useEffect(() => {
+    if (!isPreviewOpen) return;
+
+    // Block common screenshot keyboard shortcuts
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Windows: Print Screen, Alt+Print Screen, Win+Print Screen
+      // Mac: Cmd+Shift+3, Cmd+Shift+4, Cmd+Shift+5
+      // Linux: Print Screen
+      if (
+        e.key === 'PrintScreen' ||
+        (e.altKey && e.key === 'PrintScreen') ||
+        (e.metaKey && e.shiftKey && ['3', '4', '5'].includes(e.key)) ||
+        (e.ctrlKey && e.shiftKey && e.key === 'S')
+      ) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+    };
+
+    // Block right-click context menu
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    };
+
+    // Block common screenshot-related events
+    const handleSelectStart = (e: Event) => {
+      e.preventDefault();
+      return false;
+    };
+
+    // Block drag operations
+    const handleDragStart = (e: DragEvent) => {
+      e.preventDefault();
+      return false;
+    };
+
+    // Block copy operations
+    const handleCopy = (e: ClipboardEvent) => {
+      if (isPreviewOpen) {
+        e.preventDefault();
+        return false;
+      }
+    };
+
+    // Block cut operations
+    const handleCut = (e: ClipboardEvent) => {
+      if (isPreviewOpen) {
+        e.preventDefault();
+        return false;
+      }
+    };
+
+    // Add event listeners
+    document.addEventListener('keydown', handleKeyDown, true);
+    document.addEventListener('contextmenu', handleContextMenu, true);
+    document.addEventListener('selectstart', handleSelectStart, true);
+    document.addEventListener('dragstart', handleDragStart, true);
+    document.addEventListener('copy', handleCopy, true);
+    document.addEventListener('cut', handleCut, true);
+
+    // Mobile-specific: Block long press
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length > 1) {
+        e.preventDefault();
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 1) {
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener('touchstart', handleTouchStart, { passive: false });
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+    // Cleanup
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown, true);
+      document.removeEventListener('contextmenu', handleContextMenu, true);
+      document.removeEventListener('selectstart', handleSelectStart, true);
+      document.removeEventListener('dragstart', handleDragStart, true);
+      document.removeEventListener('copy', handleCopy, true);
+      document.removeEventListener('cut', handleCut, true);
+      document.removeEventListener('touchstart', handleTouchStart);
+      document.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, [isPreviewOpen]);
+
   const handleExport = async () => {
     const filename = `${resume.personal.fullName.replace(/\s+/g, '_')}_Resume.pdf`;
     await exportToPDF('resume-preview', filename);
@@ -199,17 +292,89 @@ function App() {
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               ref={previewAreaRef as any}
               onContextMenu={(e) => {
-                // Best-effort: block right-click menu on preview, especially in fullscreen
+                // Block right-click menu on preview, especially in fullscreen
                 if (isPreviewOpen) {
                   e.preventDefault();
+                  e.stopPropagation();
+                  return false;
+                }
+              }}
+              onDragStart={(e) => {
+                // Block drag operations in fullscreen
+                if (isPreviewOpen) {
+                  e.preventDefault();
+                  return false;
+                }
+              }}
+              onSelectStart={(e) => {
+                // Block text selection in fullscreen
+                if (isPreviewOpen) {
+                  e.preventDefault();
+                  return false;
                 }
               }}
             >
               <div className="preview-background-pattern"></div>
-              {isPreviewOpen && (
-                <div className="preview-watermark">
-                  <span>Preview only · Screenshots and saving are restricted</span>
-                </div>
+              {(isPreviewOpen || showMobilePreview) && (
+                <>
+                  {/* Dense watermark grid covering entire screen */}
+                  <div className="preview-watermark preview-watermark-1">
+                    <span>PREVIEW ONLY · SCREENSHOTS RESTRICTED</span>
+                  </div>
+                  <div className="preview-watermark preview-watermark-2">
+                    <span>PROTECTED CONTENT · DO NOT CAPTURE</span>
+                  </div>
+                  <div className="preview-watermark preview-watermark-3">
+                    <span>tsirang@ourstore.tech</span>
+                  </div>
+                  <div className="preview-watermark preview-watermark-4">
+                    <span>CONFIDENTIAL · NOT FOR SHARING</span>
+                  </div>
+                  <div className="preview-watermark preview-watermark-5">
+                    <span>PROTECTED BY OUR STORE</span>
+                  </div>
+                  <div className="preview-watermark preview-watermark-6">
+                    <span>SCREENSHOTS PROHIBITED</span>
+                  </div>
+                  <div className="preview-watermark preview-watermark-7">
+                    <span>tsirang@ourstore.tech</span>
+                  </div>
+                  <div className="preview-watermark preview-watermark-8">
+                    <span>PREVIEW ONLY · NO CAPTURE</span>
+                  </div>
+                  <div className="preview-watermark preview-watermark-9">
+                    <span>RESTRICTED CONTENT</span>
+                  </div>
+                  <div className="preview-watermark preview-watermark-10">
+                    <span>DO NOT SCREENSHOT</span>
+                  </div>
+                  <div className="preview-watermark preview-watermark-11">
+                    <span>tsirang@ourstore.tech</span>
+                  </div>
+                  <div className="preview-watermark preview-watermark-12">
+                    <span>PROTECTED · OUR STORE</span>
+                  </div>
+                  <div className="preview-watermark preview-watermark-13">
+                    <span>NO SCREENSHOTS ALLOWED</span>
+                  </div>
+                  <div className="preview-watermark preview-watermark-14">
+                    <span>CONFIDENTIAL PREVIEW</span>
+                  </div>
+                  <div className="preview-watermark preview-watermark-15">
+                    <span>tsirang@ourstore.tech</span>
+                  </div>
+                  <div className="preview-watermark preview-watermark-16">
+                    <span>RESTRICTED · NO CAPTURE</span>
+                  </div>
+                  <div className="preview-watermark preview-watermark-17">
+                    <span>PROTECTED CONTENT</span>
+                  </div>
+                  <div className="preview-watermark preview-watermark-18">
+                    <span>SCREENSHOTS BLOCKED</span>
+                  </div>
+                  {/* Overlay protection layer */}
+                  <div className="preview-protection-overlay"></div>
+                </>
               )}
               <motion.div
                 id="resume-preview"
@@ -400,42 +565,386 @@ function App() {
           -webkit-overflow-scrolling: touch;
         }
 
-        /* Best-effort protection for fullscreen preview (cannot stop OS screenshots) */
-        .preview-area.fullscreen,
+        /* Enhanced screenshot protection for fullscreen preview */
+        .preview-area.fullscreen {
+          -webkit-user-select: none !important;
+          -moz-user-select: none !important;
+          -ms-user-select: none !important;
+          user-select: none !important;
+          -webkit-touch-callout: none !important;
+          -webkit-user-drag: none !important;
+          -khtml-user-select: none !important;
+        }
+
         .preview-area.fullscreen * {
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
-          user-select: none;
-          -webkit-touch-callout: none;
+          -webkit-user-select: none !important;
+          -moz-user-select: none !important;
+          -ms-user-select: none !important;
+          user-select: none !important;
+          -webkit-touch-callout: none !important;
+          -webkit-user-drag: none !important;
+          -khtml-user-select: none !important;
         }
 
-        .preview-area.fullscreen img {
-          pointer-events: none;
-          -webkit-user-drag: none;
+        .preview-area.fullscreen img,
+        .preview-area.fullscreen svg,
+        .preview-area.fullscreen canvas {
+          pointer-events: none !important;
+          -webkit-user-drag: none !important;
+          -webkit-touch-callout: none !important;
+          -webkit-user-select: none !important;
         }
 
+        /* Multiple watermark layers for stronger visual protection */
         .preview-watermark {
-          position: absolute;
+          position: fixed;
           inset: 0;
           pointer-events: none;
           display: flex;
           align-items: center;
           justify-content: center;
-          opacity: 0.09;
+          z-index: 9999;
           mix-blend-mode: multiply;
-          z-index: 2;
         }
 
-        .preview-watermark span {
-          font-size: 2.25rem;
+        .preview-watermark-1 {
+          opacity: 0.15;
+        }
+
+        .preview-watermark-1 span {
+          font-size: 3rem;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 0.3em;
+          color: #dc2626;
+          transform: rotate(-25deg);
+          text-align: center;
+          padding: 0 3rem;
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .preview-watermark-2 {
+          opacity: 0.12;
+          transform: translateY(150px);
+        }
+
+        .preview-watermark-2 span {
+          font-size: 2.5rem;
           font-weight: 800;
           text-transform: uppercase;
           letter-spacing: 0.25em;
-          color: #111827;
-          transform: rotate(-25deg);
+          color: #ea580c;
+          transform: rotate(15deg);
           text-align: center;
           padding: 0 2rem;
+        }
+
+        .preview-watermark-3 {
+          opacity: 0.18;
+          transform: translateY(-150px);
+        }
+
+        .preview-watermark-3 span {
+          font-size: 1.75rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+          color: #059669;
+          transform: rotate(-10deg);
+          text-align: center;
+          padding: 0 2rem;
+        }
+
+        .preview-watermark-4 {
+          opacity: 0.14;
+          transform: translateX(-200px) translateY(100px);
+        }
+
+        .preview-watermark-4 span {
+          font-size: 2.2rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+          color: #7c3aed;
+          transform: rotate(30deg);
+          text-align: center;
+          padding: 0 2rem;
+        }
+
+        .preview-watermark-5 {
+          opacity: 0.16;
+          transform: translateX(200px) translateY(-100px);
+        }
+
+        .preview-watermark-5 span {
+          font-size: 2rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.25em;
+          color: #dc2626;
+          transform: rotate(-35deg);
+          text-align: center;
+          padding: 0 2rem;
+        }
+
+        .preview-watermark-6 {
+          opacity: 0.13;
+          transform: translateY(250px);
+        }
+
+        .preview-watermark-6 span {
+          font-size: 2.3rem;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 0.3em;
+          color: #ea580c;
+          transform: rotate(20deg);
+          text-align: center;
+          padding: 0 2rem;
+        }
+
+        .preview-watermark-7 {
+          opacity: 0.17;
+          transform: translateX(-150px) translateY(-200px);
+        }
+
+        .preview-watermark-7 span {
+          font-size: 1.5rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          color: #059669;
+          transform: rotate(45deg);
+          text-align: center;
+          padding: 0 2rem;
+        }
+
+        .preview-watermark-8 {
+          opacity: 0.15;
+          transform: translateX(150px) translateY(200px);
+        }
+
+        .preview-watermark-8 span {
+          font-size: 2.1rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.22em;
+          color: #7c3aed;
+          transform: rotate(-20deg);
+          text-align: center;
+          padding: 0 2rem;
+        }
+
+        .preview-watermark-9 {
+          opacity: 0.12;
+          transform: translateY(-250px);
+        }
+
+        .preview-watermark-9 span {
+          font-size: 2.4rem;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 0.28em;
+          color: #dc2626;
+          transform: rotate(10deg);
+          text-align: center;
+          padding: 0 2rem;
+        }
+
+        .preview-watermark-10 {
+          opacity: 0.16;
+          transform: translateX(-250px);
+        }
+
+        .preview-watermark-10 span {
+          font-size: 1.9rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+          color: #ea580c;
+          transform: rotate(-40deg);
+          text-align: center;
+          padding: 0 2rem;
+        }
+
+        .preview-watermark-11 {
+          opacity: 0.19;
+          transform: translateX(250px);
+        }
+
+        .preview-watermark-11 span {
+          font-size: 1.6rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.18em;
+          color: #059669;
+          transform: rotate(35deg);
+          text-align: center;
+          padding: 0 2rem;
+        }
+
+        .preview-watermark-12 {
+          opacity: 0.14;
+          transform: translateX(-100px) translateY(300px);
+        }
+
+        .preview-watermark-12 span {
+          font-size: 2rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.24em;
+          color: #7c3aed;
+          transform: rotate(-15deg);
+          text-align: center;
+          padding: 0 2rem;
+        }
+
+        .preview-watermark-13 {
+          opacity: 0.17;
+          transform: translateX(100px) translateY(-300px);
+        }
+
+        .preview-watermark-13 span {
+          font-size: 2.2rem;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 0.26em;
+          color: #dc2626;
+          transform: rotate(25deg);
+          text-align: center;
+          padding: 0 2rem;
+        }
+
+        .preview-watermark-14 {
+          opacity: 0.13;
+          transform: translateY(350px);
+        }
+
+        .preview-watermark-14 span {
+          font-size: 1.8rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.21em;
+          color: #ea580c;
+          transform: rotate(-30deg);
+          text-align: center;
+          padding: 0 2rem;
+        }
+
+        .preview-watermark-15 {
+          opacity: 0.18;
+          transform: translateX(-300px) translateY(50px);
+        }
+
+        .preview-watermark-15 span {
+          font-size: 1.4rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.16em;
+          color: #059669;
+          transform: rotate(50deg);
+          text-align: center;
+          padding: 0 2rem;
+        }
+
+        .preview-watermark-16 {
+          opacity: 0.15;
+          transform: translateX(300px) translateY(-50px);
+        }
+
+        .preview-watermark-16 span {
+          font-size: 1.7rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.19em;
+          color: #7c3aed;
+          transform: rotate(-45deg);
+          text-align: center;
+          padding: 0 2rem;
+        }
+
+        .preview-watermark-17 {
+          opacity: 0.16;
+          transform: translateY(-350px);
+        }
+
+        .preview-watermark-17 span {
+          font-size: 2.5rem;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 0.27em;
+          color: #dc2626;
+          transform: rotate(5deg);
+          text-align: center;
+          padding: 0 2rem;
+        }
+
+        .preview-watermark-18 {
+          opacity: 0.14;
+          transform: translateX(-180px) translateY(180px);
+        }
+
+        .preview-watermark-18 span {
+          font-size: 1.9rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.23em;
+          color: #ea580c;
+          transform: rotate(40deg);
+          text-align: center;
+          padding: 0 2rem;
+        }
+
+        /* Protection overlay with pattern */
+        .preview-protection-overlay {
+          position: fixed;
+          inset: 0;
+          pointer-events: none;
+          z-index: 9998;
+          background-image: 
+            repeating-linear-gradient(
+              45deg,
+              transparent,
+              transparent 10px,
+              rgba(220, 38, 38, 0.03) 10px,
+              rgba(220, 38, 38, 0.03) 20px
+            ),
+            repeating-linear-gradient(
+              -45deg,
+              transparent,
+              transparent 10px,
+              rgba(234, 88, 12, 0.03) 10px,
+              rgba(234, 88, 12, 0.03) 20px
+            );
+          mix-blend-mode: overlay;
+        }
+
+        /* Mobile-specific protections */
+        @media (max-width: 768px) {
+          .preview-watermark-1 span { font-size: 1.8rem; }
+          .preview-watermark-2 span { font-size: 1.4rem; }
+          .preview-watermark-3 span { font-size: 1.2rem; }
+          .preview-watermark-4 span { font-size: 1.5rem; }
+          .preview-watermark-5 span { font-size: 1.3rem; }
+          .preview-watermark-6 span { font-size: 1.6rem; }
+          .preview-watermark-7 span { font-size: 1.1rem; }
+          .preview-watermark-8 span { font-size: 1.4rem; }
+          .preview-watermark-9 span { font-size: 1.7rem; }
+          .preview-watermark-10 span { font-size: 1.3rem; }
+          .preview-watermark-11 span { font-size: 1.2rem; }
+          .preview-watermark-12 span { font-size: 1.4rem; }
+          .preview-watermark-13 span { font-size: 1.5rem; }
+          .preview-watermark-14 span { font-size: 1.3rem; }
+          .preview-watermark-15 span { font-size: 1.1rem; }
+          .preview-watermark-16 span { font-size: 1.2rem; }
+          .preview-watermark-17 span { font-size: 1.6rem; }
+          .preview-watermark-18 span { font-size: 1.3rem; }
+
+          .preview-area.fullscreen {
+            -webkit-touch-callout: none !important;
+            -webkit-user-select: none !important;
+            touch-action: none;
+          }
         }
 
         .preview-container {
