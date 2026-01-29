@@ -14,8 +14,7 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onNavigate }) => {
             <div className="footer-content">
                 <div className="footer-brand">
                     <div className="logo-small">
-                        <span className="logo-icon-small">🐉</span>
-                        <h2>Our Store</h2>
+                        <img src="/logo.png" alt="Our Store" className="footer-logo-image" />
                     </div>
                     <p className="brand-tagline">Crafting professional resumes with Bhutanese excellence.</p>
                 </div>
@@ -94,13 +93,10 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onNavigate }) => {
                     margin-bottom: 1rem;
                 }
 
-                .logo-small h2 {
-                    font-size: 1.25rem;
-                    font-weight: 900;
-                    background: linear-gradient(135deg, var(--primary), var(--secondary));
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent;
-                    text-transform: uppercase;
+                .footer-logo-image {
+                    height: 60px; /* Increased size */
+                    width: auto;
+                    object-fit: contain;
                 }
 
                 .brand-tagline {

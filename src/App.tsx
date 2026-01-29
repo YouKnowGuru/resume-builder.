@@ -195,13 +195,7 @@ function App() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <div className="logo-mark">
-                  <span className="logo-glyph">༄</span>
-                </div>
-                <div className="logo-text">
-                  <h1>Our Store</h1>
-                  <p>Bhutanese-inspired, job-ready resumes</p>
-                </div>
+                <img src="/logo.png" alt="Our Store" className="logo-image" />
               </motion.div>
               <div className="header-actions">
                 <motion.button
@@ -301,13 +295,6 @@ function App() {
               }}
               onDragStart={(e) => {
                 // Block drag operations in fullscreen
-                if (isPreviewOpen) {
-                  e.preventDefault();
-                  return false;
-                }
-              }}
-              onSelectStart={(e) => {
-                // Block text selection in fullscreen
                 if (isPreviewOpen) {
                   e.preventDefault();
                   return false;
@@ -466,45 +453,10 @@ function App() {
           min-width: 0;
         }
 
-        .logo-mark {
-          width: 40px;
-          height: 40px;
-          border-radius: 999px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: conic-gradient(from 180deg, var(--primary), var(--secondary), var(--accent), var(--primary));
-          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
-          border: 2px solid rgba(255, 255, 255, 0.7);
-        }
-
-        .logo-glyph {
-          font-size: 1.25rem;
-          color: #fff;
-        }
-
-        .logo-text {
-          display: flex;
-          flex-direction: column;
-          min-width: 0;
-        }
-
-        .logo-text h1 {
-          font-size: 1.35rem;
-          font-weight: 800;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          color: var(--text-main);
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
-        .logo-text p {
-          font-size: 0.75rem;
-          color: var(--text-muted);
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
+        .logo-image {
+            height: 80px; /* Increased size as requested */
+            width: auto;
+            object-fit: contain;
         }
 
         .header-actions {
