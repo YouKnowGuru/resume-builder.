@@ -5,7 +5,7 @@ export const initialResumeState: ResumeData = {
         fullName: 'Dorji Wangchuk',
         email: 'dorji.wangchuk@druknet.bt',
         phone: '+975 1711 0000',
-        location: 'Thimphu, Bhutan',
+        location: 'Damphu, Tsirang',
         title: 'Senior Software Engineer',
         website: 'dorji.dev.bt',
         linkedin: 'linkedin.com/in/dorjiwangchuk',

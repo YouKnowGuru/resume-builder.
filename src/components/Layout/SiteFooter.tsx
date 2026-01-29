@@ -49,13 +49,13 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onNavigate }) => {
                         <a href="#" aria-label="Instagram" className="social-link"><Instagram size={20} /></a>
                         <a href="#" aria-label="Facebook" className="social-link"><Facebook size={20} /></a>
                         <a href="#" aria-label="YouTube" className="social-link"><Youtube size={20} /></a>
-                        <a href="mailto:hello@ourstore.com" aria-label="Email" className="social-link"><Mail size={20} /></a>
+                        <a href="mailto:tsirang@ourstore.tech" aria-label="Email" className="social-link"><Mail size={20} /></a>
                     </div>
                 </div>
             </div>
 
             <div className="footer-bottom">
-                <p>&copy; {currentYear} Our Store. All rights reserved.</p>
+                <p>&copy; 2023 - {currentYear} Our Store. All rights reserved.</p>
                 <div className="made-with">
                     <span>Made with</span>
                     <motion.div

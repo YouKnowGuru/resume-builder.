@@ -135,8 +135,8 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
                             If you have any questions or concerns about this Privacy Policy, please contact us at:
                         </p>
                         <p className="contact-info">
-                            <strong>Email:</strong> privacy@ourstore.bt<br />
-                            <strong>Address:</strong> Thimphu, Bhutan
+                            <strong>Email:</strong> tsirang@ourstore.tech<br />
+                            <strong>Address:</strong> Damphu, Tsirang
                         </p>
                     </section>
                 </div>

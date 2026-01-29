@@ -198,8 +198,19 @@ function App() {
               animate={{ flex: isPreviewOpen ? 10 : 1.0 }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               ref={previewAreaRef as any}
+              onContextMenu={(e) => {
+                // Best-effort: block right-click menu on preview, especially in fullscreen
+                if (isPreviewOpen) {
+                  e.preventDefault();
+                }
+              }}
             >
               <div className="preview-background-pattern"></div>
+              {isPreviewOpen && (
+                <div className="preview-watermark">
+                  <span>Preview only · Screenshots and saving are restricted</span>
+                </div>
+              )}
               <motion.div
                 id="resume-preview"
                 className="preview-container"
@@ -387,6 +398,44 @@ function App() {
                       rgba(244, 247, 246, 0.98);
           overflow-y: auto;
           -webkit-overflow-scrolling: touch;
+        }
+
+        /* Best-effort protection for fullscreen preview (cannot stop OS screenshots) */
+        .preview-area.fullscreen,
+        .preview-area.fullscreen * {
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          -webkit-touch-callout: none;
+        }
+
+        .preview-area.fullscreen img {
+          pointer-events: none;
+          -webkit-user-drag: none;
+        }
+
+        .preview-watermark {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0.09;
+          mix-blend-mode: multiply;
+          z-index: 2;
+        }
+
+        .preview-watermark span {
+          font-size: 2.25rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.25em;
+          color: #111827;
+          transform: rotate(-25deg);
+          text-align: center;
+          padding: 0 2rem;
         }
 
         .preview-container {

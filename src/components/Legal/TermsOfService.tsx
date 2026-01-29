@@ -185,8 +185,8 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBack }) => {
                             If you have any questions about these Terms of Service, please contact us at:
                         </p>
                         <p className="contact-info">
-                            <strong>Email:</strong> legal@ourstore.bt<br />
-                            <strong>Address:</strong> Thimphu, Bhutan
+                            <strong>Email:</strong> tsirang@ourstore.tech<br />
+                            <strong>Address:</strong> Damphu, Tsirang
                         </p>
                     </section>
                 </div>
