@@ -1,12 +1,12 @@
+// Cache bust: v2.0 - Watermark removed
 import React, { useEffect } from 'react';
 import { useResumeStore } from '../../store/useResumeStore';
 import { ModernTemplate } from '../../templates/ModernTemplate';
 import { CorporateTemplate } from '../../templates/CorporateTemplate';
 import { CreativeTemplate } from '../../templates/CreativeTemplate';
 import { RoyalBhutanTemplate } from '../../templates/RoyalBhutanTemplate';
-import { WatermarkOverlay } from './WatermarkOverlay';
 
-export const Preview: React.FC<{ showWatermark?: boolean }> = ({ showWatermark = false }) => {
+export const Preview: React.FC = () => {
     const { resume } = useResumeStore();
 
     useEffect(() => {
