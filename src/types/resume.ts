@@ -94,7 +94,7 @@ export interface ResumeData {
     fontFamily: string;
     fontSize: number; // in pt or px
     spacing: number;  // multiplier
-    photoLayout?: 'none' | 'half-right';
+    photoLayout?: 'none' | 'half-left';
     updatedAt: number;
   };
 }

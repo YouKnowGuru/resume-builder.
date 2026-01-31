@@ -9,7 +9,7 @@ export const CorporateTemplate: React.FC<TemplateProps> = ({ data }) => {
   const { personal, summary, experience, education, skills, languages, certifications, footer } = data;
   const { themeColor, fontSize, spacing } = data.metadata;
   const photoLayout = data.metadata.photoLayout || 'none';
-  const showHalfRightPhoto = photoLayout === 'half-right' && !!personal.avatar;
+  const showHalfLeftPhoto = photoLayout === 'half-left' && !!personal.avatar;
 
   return (
     <div
@@ -19,20 +19,22 @@ export const CorporateTemplate: React.FC<TemplateProps> = ({ data }) => {
         '--line-spacing': spacing
       } as any}
     >
-      <header className={`resume-header ${showHalfRightPhoto ? 'with-photo' : ''}`} style={{ borderTop: `8px solid ${themeColor}` }}>
-        <div className="header-main">
-          <h1 className="name">{personal.fullName}</h1>
-          <p className="title">{personal.title}</p>
-        </div>
-        <div className="contact-grid">
-          <p>{personal.location} | <span className="phone-big">{personal.phone}</span> | {personal.email}</p>
-          <p>{personal.linkedin} | {personal.website} | {personal.github}</p>
-        </div>
-        {showHalfRightPhoto && (
+      <header className={`resume-header ${showHalfLeftPhoto ? 'with-photo' : ''}`} style={{ borderTop: `8px solid ${themeColor}` }}>
+        {showHalfLeftPhoto && (
           <div className="header-photo">
             <img src={personal.avatar} alt={`${personal.fullName} photo`} />
           </div>
         )}
+        <div className="header-text">
+          <div className="header-main">
+            <h1 className="name">{personal.fullName}</h1>
+            <p className="title">{personal.title}</p>
+          </div>
+          <div className="contact-grid">
+            <p>{personal.location} | <span className="phone-big">{personal.phone}</span> | {personal.email}</p>
+            <p>{personal.linkedin} | {personal.website} | {personal.github}</p>
+          </div>
+        </div>
       </header>
 
       <div className="resume-content">
@@ -143,6 +145,10 @@ export const CorporateTemplate: React.FC<TemplateProps> = ({ data }) => {
           justify-content: space-between;
           gap: 10mm;
           text-align: left;
+        }
+
+        .header-text {
+          flex: 1;
         }
 
         .header-photo {

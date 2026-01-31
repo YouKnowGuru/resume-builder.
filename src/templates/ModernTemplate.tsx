@@ -10,7 +10,7 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
   const { personal, summary, experience, education, skills, languages, certifications, footer } = data;
   const { themeColor, fontSize, spacing } = data.metadata;
   const photoLayout = data.metadata.photoLayout || 'none';
-  const showHalfRightPhoto = photoLayout === 'half-right' && !!personal.avatar;
+  const showHalfLeftPhoto = photoLayout === 'half-left' && !!personal.avatar;
 
   return (
     <div
@@ -21,7 +21,12 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
         '--line-spacing': spacing
       } as any}
     >
-      <header className={`resume-header ${showHalfRightPhoto ? 'with-photo' : ''}`}>
+      <header className={`resume-header ${showHalfLeftPhoto ? 'with-photo' : ''}`}>
+        {showHalfLeftPhoto && (
+          <div className="header-photo">
+            <img src={personal.avatar} alt={`${personal.fullName} photo`} />
+          </div>
+        )}
         <div className="header-left">
           <h1 className="name">{personal.fullName}</h1>
           <p className="title">{personal.title}</p>
@@ -53,12 +58,6 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
             )}
           </div>
         </div>
-
-        {showHalfRightPhoto && (
-          <div className="header-photo">
-            <img src={personal.avatar} alt={`${personal.fullName} photo`} />
-          </div>
-        )}
       </header>
 
       <div className="resume-content">
@@ -340,6 +339,6 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
           color: #666;
         }
       `}</style>
-    </div>
+    </div >
   );
 };

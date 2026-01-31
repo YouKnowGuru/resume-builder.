@@ -26,7 +26,7 @@ export const PersonalEditor: React.FC = () => {
 
         updatePersonal({ avatar: dataUrl });
         // Convenience: if user uploads a photo, enable the half-right layout by default.
-        setPhotoLayout('half-right');
+        setPhotoLayout('half-left');
     };
 
     return (
@@ -64,7 +64,7 @@ export const PersonalEditor: React.FC = () => {
                         </div>
                     </div>
                     <small className="help-text">
-                        Tip: use a clear headshot; it will be placed on the right when “Half photo” is enabled.
+                        Tip: use a clear headshot; it will be placed on the left when “Half photo” is enabled.
                     </small>
                 </div>
 

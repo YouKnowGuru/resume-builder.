@@ -10,11 +10,11 @@ export const RoyalBhutanTemplate: React.FC<TemplateProps> = ({ data }) => {
   const { personal, summary, experience, education, skills, languages, certifications, footer } = data;
   const { themeColor, fontSize, spacing } = data.metadata;
   const photoLayout = data.metadata.photoLayout || 'none';
-  const showHalfRightPhoto = photoLayout === 'half-right' && !!personal.avatar;
+  const showHalfLeftPhoto = photoLayout === 'half-left' && !!personal.avatar;
 
   return (
     <div
-      className={`royal-template ${showHalfRightPhoto ? 'with-photo' : ''}`}
+      className={`royal-template ${showHalfLeftPhoto ? 'with-photo' : ''}`}
       style={{
         '--accent-color': themeColor,
         '--font-size': `${fontSize}pt`,
@@ -89,7 +89,7 @@ export const RoyalBhutanTemplate: React.FC<TemplateProps> = ({ data }) => {
       <main className="royal-main">
         <section className="royal-section">
           <h2 className="royal-section-title">Profile</h2>
-          {showHalfRightPhoto && (
+          {showHalfLeftPhoto && (
             <div className="royal-inline-photo">
               <img src={personal.avatar} alt={`${personal.fullName} photo`} />
             </div>
@@ -180,14 +180,14 @@ export const RoyalBhutanTemplate: React.FC<TemplateProps> = ({ data }) => {
         }
 
         .royal-inline-photo {
-          float: right;
+          float: left;
           width: 32mm;
           height: 42mm;
           border-radius: 12px;
           overflow: hidden;
           border: 2px solid rgba(15, 23, 42, 0.12);
           background: #fff;
-          margin: 0 0 6mm 6mm;
+          margin: 0 6mm 6mm 0;
         }
 
         .royal-inline-photo img {

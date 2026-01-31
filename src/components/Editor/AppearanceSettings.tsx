@@ -92,10 +92,10 @@ export const AppearanceSettings: React.FC = () => {
           <select
             className="photo-select"
             value={safePhotoLayout}
-            onChange={(e) => setPhotoLayout(e.target.value as 'none' | 'half-right')}
+            onChange={(e) => setPhotoLayout(e.target.value as 'none' | 'half-left')}
           >
             <option value="none">No photo</option>
-            <option value="half-right">Half photo (right)</option>
+            <option value="half-left">Half photo (left)</option>
           </select>
         </div>
         <p className="photo-hint">Upload a photo in Personal Info to use this.</p>

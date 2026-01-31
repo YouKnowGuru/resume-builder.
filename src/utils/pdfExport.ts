@@ -12,8 +12,7 @@ export const exportToPDF = async (elementId: string, filename: string) => {
             useCORS: true,
             logging: false,
             backgroundColor: '#ffffff',
-            windowWidth: 1200,
-            windowHeight: 1600,
+            windowWidth: 800, // Standard width for A4 (near 794px)
             onclone: (clonedDoc) => {
                 const clonedElement = clonedDoc.getElementById(elementId);
                 if (clonedElement) {
@@ -22,17 +21,20 @@ export const exportToPDF = async (elementId: string, filename: string) => {
                     clonedElement.style.visibility = 'visible';
                     clonedElement.style.position = 'relative';
                     clonedElement.style.transform = 'none';
-                    clonedElement.style.margin = '0';
-                    clonedElement.style.padding = '0';
+                    clonedElement.style.margin = '0 auto';
+                    clonedElement.style.padding = '10mm'; // Add margins
+                    clonedElement.style.boxSizing = 'border-box';
                     clonedElement.style.width = '210mm';
                     clonedElement.style.minHeight = '297mm';
+                    clonedElement.style.background = 'white';
 
-                    // Ensure all parents are visible
+                    // Ensure all parents are visible and don't clip
                     let current: HTMLElement | null = clonedElement;
                     while (current) {
                         current.style.display = 'block';
                         current.style.visibility = 'visible';
                         current.style.overflow = 'visible';
+                        current.style.background = 'transparent';
                         current = current.parentElement;
                     }
 
@@ -60,7 +62,7 @@ export const exportToPDF = async (elementId: string, filename: string) => {
 
         // A4 dimensions in mm
         const imgWidth = 210;
-        const pageHeight = 295;
+        const pageHeight = 297; // A4 standard
 
         // Calculate height while ensuring we don't divide by zero
         const imgHeight = (canvas.height * imgWidth) / (canvas.width || 1);
@@ -70,20 +72,20 @@ export const exportToPDF = async (elementId: string, filename: string) => {
             throw new Error(`Invalid image dimensions calculated: ${imgHeight}`);
         }
 
-        let heightLeft = imgHeight;
         const pdf = new jsPDF('p', 'mm', 'a4');
         let position = 0;
+        let remainingHeight = imgHeight;
 
         // Add the first page
         pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+        remainingHeight -= pageHeight;
 
         // Add additional pages
-        while (heightLeft > 0) {
-            position = heightLeft - imgHeight;
+        while (remainingHeight > 0) {
+            position = remainingHeight - imgHeight;
             pdf.addPage();
             pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
+            remainingHeight -= pageHeight;
         }
 
         pdf.save(filename);

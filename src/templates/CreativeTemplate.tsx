@@ -3,148 +3,148 @@ import type { ResumeData } from '../types/resume';
 import { Mail, Phone, MapPin, Globe, Award } from 'lucide-react';
 
 interface TemplateProps {
-    data: ResumeData;
+  data: ResumeData;
 }
 
 export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
-    const { personal, summary, experience, education, skills, languages, certifications, footer } = data;
-    const { themeColor, fontSize, spacing } = data.metadata;
-    const photoLayout = data.metadata.photoLayout || 'none';
-    const showHalfRightPhoto = photoLayout === 'half-right' && !!personal.avatar;
+  const { personal, summary, experience, education, skills, languages, certifications, footer } = data;
+  const { themeColor, fontSize, spacing } = data.metadata;
+  const photoLayout = data.metadata.photoLayout || 'none';
+  const showHalfLeftPhoto = photoLayout === 'half-left' && !!personal.avatar;
 
-    return (
-        <div
-            className="creative-template"
-            style={{
-                '--theme-color': themeColor,
-                '--font-size': `${fontSize}pt`,
-                '--line-spacing': spacing
-            } as any}
-        >
-            <div className="sidebar-decor"></div>
+  return (
+    <div
+      className="creative-template"
+      style={{
+        '--theme-color': themeColor,
+        '--font-size': `${fontSize}pt`,
+        '--line-spacing': spacing
+      } as any}
+    >
+      <div className="sidebar-decor"></div>
 
-            <div className={`main-grid ${showHalfRightPhoto ? 'with-photo' : ''}`}>
-                <aside className="left-panel">
-                    <header className="header-block">
-                        <h1 className="name">{personal.fullName}</h1>
-                        <p className="title">{personal.title}</p>
-                    </header>
+      <div className={`main-grid ${showHalfLeftPhoto ? 'with-photo' : ''}`}>
+        <aside className="left-panel">
+          <header className="header-block">
+            <h1 className="name">{personal.fullName}</h1>
+            <p className="title">{personal.title}</p>
+          </header>
 
-                    <section className="side-section">
-                        <h2 className="side-title">Contact</h2>
-                        <div className="contact-list">
-                            <div className="contact-item">
-                                <Mail size={14} /> <span>{personal.email}</span>
-                            </div>
-                            <div className="contact-item">
-                                <Phone size={14} /> <span className="phone-big">{personal.phone}</span>
-                            </div>
-                            <div className="contact-item">
-                                <MapPin size={14} /> <span>{personal.location}</span>
-                            </div>
-                            {personal.website && (
-                                <div className="contact-item">
-                                    <Globe size={14} /> <span>{personal.website}</span>
-                                </div>
-                            )}
-                        </div>
-                    </section>
-
-                    <section className="side-section">
-                        <h2 className="side-title">Skills</h2>
-                        <div className="skills-tags">
-                            {skills.map(skill => (
-                                <div key={skill.id} className="skill-bubble">
-                                    {skill.name}
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-
-                    {languages.length > 0 && (
-                        <section className="side-section">
-                            <h2 className="side-title">Languages</h2>
-                            {languages.map(lang => (
-                                <div key={lang.id} className="detail-item">
-                                    <span className="detail-label">{lang.name}</span>
-                                    <span className="detail-value">{lang.level}</span>
-                                </div>
-                            ))}
-                        </section>
-                    )}
-                </aside>
-
-                <main className="right-panel">
-                    <section className="body-section">
-                        <h2 className="body-title">About Me</h2>
-                        {showHalfRightPhoto && (
-                            <div className="inline-photo">
-                                <img src={personal.avatar} alt={`${personal.fullName} photo`} />
-                            </div>
-                        )}
-                        <p className="summary-text">{summary}</p>
-                    </section>
-
-                    <section className="body-section">
-                        <h2 className="body-title">Experience</h2>
-                        <div className="timeline">
-                            {experience.map(exp => (
-                                <div key={exp.id} className="timeline-item">
-                                    <div className="timeline-dot"></div>
-                                    <div className="timeline-content">
-                                        <div className="timeline-header">
-                                            <h3>{exp.position}</h3>
-                                            <span className="timeline-date">{exp.startDate} - {exp.current ? 'Present' : exp.endDate}</span>
-                                        </div>
-                                        <p className="timeline-company">{exp.company}</p>
-                                        <div className="timeline-desc">
-                                            {exp.description.split('\n').map((line, i) => (
-                                                <p key={i}>{line}</p>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-
-                    <section className="body-section">
-                        <h2 className="body-title">Education</h2>
-                        {education.map(edu => (
-                            <div key={edu.id} className="edu-block">
-                                <h3>{edu.degree} in {edu.field}</h3>
-                                <p>{edu.institution}</p>
-                                <span className="edu-date">{edu.startDate} - {edu.endDate}</span>
-                            </div>
-                        ))}
-                    </section>
-
-                    {certifications.length > 0 && (
-                        <section className="body-section">
-                            <h2 className="body-title">Certifications</h2>
-                            <div className="cert-grid">
-                                {certifications.map(cert => (
-                                    <div key={cert.id} className="cert-card">
-                                        <Award size={16} className="cert-icon" />
-                                        <div>
-                                            <h4>{cert.name}</h4>
-                                            <p>{cert.issuer} | {cert.date}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </section>
-                    )}
-
-                    {footer && (
-                        <footer className="resume-footer-creative">
-                            <p>{footer}</p>
-                        </footer>
-                    )}
-                </main>
+          <section className="side-section">
+            <h2 className="side-title">Contact</h2>
+            <div className="contact-list">
+              <div className="contact-item">
+                <Mail size={14} /> <span>{personal.email}</span>
+              </div>
+              <div className="contact-item">
+                <Phone size={14} /> <span className="phone-big">{personal.phone}</span>
+              </div>
+              <div className="contact-item">
+                <MapPin size={14} /> <span>{personal.location}</span>
+              </div>
+              {personal.website && (
+                <div className="contact-item">
+                  <Globe size={14} /> <span>{personal.website}</span>
+                </div>
+              )}
             </div>
+          </section>
 
-            <style>{`
+          <section className="side-section">
+            <h2 className="side-title">Skills</h2>
+            <div className="skills-tags">
+              {skills.map(skill => (
+                <div key={skill.id} className="skill-bubble">
+                  {skill.name}
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {languages.length > 0 && (
+            <section className="side-section">
+              <h2 className="side-title">Languages</h2>
+              {languages.map(lang => (
+                <div key={lang.id} className="detail-item">
+                  <span className="detail-label">{lang.name}</span>
+                  <span className="detail-value">{lang.level}</span>
+                </div>
+              ))}
+            </section>
+          )}
+        </aside>
+
+        <main className="right-panel">
+          <section className="body-section">
+            <h2 className="body-title">About Me</h2>
+            {showHalfLeftPhoto && (
+              <div className="inline-photo">
+                <img src={personal.avatar} alt={`${personal.fullName} photo`} />
+              </div>
+            )}
+            <p className="summary-text">{summary}</p>
+          </section>
+
+          <section className="body-section">
+            <h2 className="body-title">Experience</h2>
+            <div className="timeline">
+              {experience.map(exp => (
+                <div key={exp.id} className="timeline-item">
+                  <div className="timeline-dot"></div>
+                  <div className="timeline-content">
+                    <div className="timeline-header">
+                      <h3>{exp.position}</h3>
+                      <span className="timeline-date">{exp.startDate} - {exp.current ? 'Present' : exp.endDate}</span>
+                    </div>
+                    <p className="timeline-company">{exp.company}</p>
+                    <div className="timeline-desc">
+                      {exp.description.split('\n').map((line, i) => (
+                        <p key={i}>{line}</p>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="body-section">
+            <h2 className="body-title">Education</h2>
+            {education.map(edu => (
+              <div key={edu.id} className="edu-block">
+                <h3>{edu.degree} in {edu.field}</h3>
+                <p>{edu.institution}</p>
+                <span className="edu-date">{edu.startDate} - {edu.endDate}</span>
+              </div>
+            ))}
+          </section>
+
+          {certifications.length > 0 && (
+            <section className="body-section">
+              <h2 className="body-title">Certifications</h2>
+              <div className="cert-grid">
+                {certifications.map(cert => (
+                  <div key={cert.id} className="cert-card">
+                    <Award size={16} className="cert-icon" />
+                    <div>
+                      <h4>{cert.name}</h4>
+                      <p>{cert.issuer} | {cert.date}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {footer && (
+            <footer className="resume-footer-creative">
+              <p>{footer}</p>
+            </footer>
+          )}
+        </main>
+      </div>
+
+      <style>{`
         .creative-template {
           --sidebar-width: 240px;
           position: relative;
@@ -240,13 +240,13 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
         }
 
         .inline-photo {
-          float: right;
+          float: left;
           width: 32mm;
           height: 42mm;
           border-radius: 12px;
           overflow: hidden;
           border: 2px solid rgba(0,0,0,0.08);
-          margin: 0 0 6mm 6mm;
+          margin: 0 6mm 6mm 0;
         }
 
         .inline-photo img {
@@ -405,6 +405,6 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
           border-radius: 12px;
         }
       `}</style>
-        </div>
-    );
+    </div>
+  );
 };
