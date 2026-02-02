@@ -921,14 +921,14 @@ function App() {
 
         .preview-container {
           width: min(210mm, 100%);
-          min-height: 297mm;
+          min-height: auto;
           background: white;
           box-shadow: 0 20px 50px rgba(0,0,0,0.12);
           transform-origin: top center;
           z-index: 1;
           border-radius: 18px;
           border: 1px solid rgba(15, 23, 42, 0.06);
-          overflow: hidden;
+          overflow: visible;
         }
 
         .glass-light {
@@ -1094,6 +1094,7 @@ function App() {
           .preview-container {
             width: 100%;
             min-height: auto;
+            height: auto;
             transform-origin: top center;
           }
 

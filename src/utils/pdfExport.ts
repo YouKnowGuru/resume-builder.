@@ -12,7 +12,7 @@ export const exportToPDF = async (elementId: string, filename: string) => {
             useCORS: true,
             logging: false,
             backgroundColor: '#ffffff',
-            windowWidth: 800, // Standard width for A4 (near 794px)
+            windowWidth: 1000, // Wider capture for better quality
             onclone: (clonedDoc) => {
                 const clonedElement = clonedDoc.getElementById(elementId);
                 if (clonedElement) {
@@ -21,11 +21,12 @@ export const exportToPDF = async (elementId: string, filename: string) => {
                     clonedElement.style.visibility = 'visible';
                     clonedElement.style.position = 'relative';
                     clonedElement.style.transform = 'none';
-                    clonedElement.style.margin = '0 auto';
-                    clonedElement.style.padding = '10mm'; // Add margins
+                    clonedElement.style.margin = '0';
+                    clonedElement.style.padding = '15mm'; // Add margins for breathing room
                     clonedElement.style.boxSizing = 'border-box';
-                    clonedElement.style.width = '210mm';
-                    clonedElement.style.minHeight = '297mm';
+                    clonedElement.style.width = 'auto';
+                    clonedElement.style.minHeight = 'auto';
+                    clonedElement.style.height = 'auto';
                     clonedElement.style.background = 'white';
 
                     // Ensure all parents are visible and don't clip
@@ -60,33 +61,25 @@ export const exportToPDF = async (elementId: string, filename: string) => {
 
         const imgData = canvas.toDataURL('image/jpeg', 0.95);
 
-        // A4 dimensions in mm
-        const imgWidth = 210;
-        const pageHeight = 297; // A4 standard
-
-        // Calculate height while ensuring we don't divide by zero
-        const imgHeight = (canvas.height * imgWidth) / (canvas.width || 1);
+        // Calculate dimensions for a single page that fits all content
+        // Use a standard width (210mm like A4) but dynamic height
+        const pdfWidth = 210; // mm
+        const pdfHeight = (canvas.height * pdfWidth) / (canvas.width || 1);
 
         // Final sanity check for finite numbers
-        if (!isFinite(imgHeight) || imgHeight <= 0) {
-            throw new Error(`Invalid image dimensions calculated: ${imgHeight}`);
+        if (!isFinite(pdfHeight) || pdfHeight <= 0) {
+            throw new Error(`Invalid image dimensions calculated: ${pdfHeight}`);
         }
 
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        let position = 0;
-        let remainingHeight = imgHeight;
+        // Create PDF with custom page size to fit all content on one page
+        const pdf = new jsPDF({
+            orientation: pdfHeight > pdfWidth ? 'portrait' : 'landscape',
+            unit: 'mm',
+            format: [pdfWidth, pdfHeight]
+        });
 
-        // Add the first page
-        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-        remainingHeight -= pageHeight;
-
-        // Add additional pages
-        while (remainingHeight > 0) {
-            position = remainingHeight - imgHeight;
-            pdf.addPage();
-            pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-            remainingHeight -= pageHeight;
-        }
+        // Add the entire image to a single page
+        pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
 
         pdf.save(filename);
     } catch (error) {
