@@ -45,7 +45,7 @@ function App() {
   }, [isDarkMode]);
 
   // Enhanced screenshot protection for fullscreen preview
-  useEffect(() => {
+  /* useEffect(() => {
     if (!isPreviewOpen) return;
 
     // Block common screenshot keyboard shortcuts
@@ -135,7 +135,7 @@ function App() {
       document.removeEventListener('touchstart', handleTouchStart);
       document.removeEventListener('touchmove', handleTouchMove);
     };
-  }, [isPreviewOpen]);
+  }, [isPreviewOpen]); */
 
   const handleExport = async () => {
     const filename = `${resume.personal.fullName.replace(/\s+/g, '_')}_Resume.pdf`;
@@ -242,7 +242,7 @@ function App() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="btn-primary desktop-only"
-                  onClick={handleOpenPaymentModal}
+                  onClick={handleExport}
                 >
                   <span>Export PDF</span>
                 </motion.button>
@@ -313,10 +313,10 @@ function App() {
               }}
             >
               <div className="preview-background-pattern"></div>
-              {(isPreviewOpen || showMobilePreview) && (
-                <>
-                  {/* Dense watermark grid covering entire screen */}
-                  <div className="preview-watermark preview-watermark-1">
+              {/* {(isPreviewOpen || showMobilePreview) && (
+                <> */}
+              {/* Dense watermark grid covering entire screen */}
+              {/* <div className="preview-watermark preview-watermark-1">
                     <span>PREVIEW ONLY · SCREENSHOTS RESTRICTED</span>
                   </div>
                   <div className="preview-watermark preview-watermark-2">
@@ -369,11 +369,11 @@ function App() {
                   </div>
                   <div className="preview-watermark preview-watermark-18">
                     <span>SCREENSHOTS BLOCKED</span>
-                  </div>
-                  {/* Overlay protection layer */}
-                  <div className="preview-protection-overlay"></div>
+                  </div> */}
+              {/* Overlay protection layer */}
+              {/* <div className="preview-protection-overlay"></div>
                 </>
-              )}
+              )} */}
               <motion.div
                 id="resume-preview"
                 className="preview-container"
@@ -386,7 +386,7 @@ function App() {
                 <Preview />
               </motion.div>
               {showMobilePreview && (
-                <button className="mobile-export-btn btn-primary mobile-only" onClick={handleOpenPaymentModal}>
+                <button className="mobile-export-btn btn-primary mobile-only" onClick={handleExport}>
                   Export PDF
                 </button>
               )}
