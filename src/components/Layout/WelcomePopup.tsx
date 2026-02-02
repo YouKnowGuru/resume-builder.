@@ -2,91 +2,91 @@ import { motion } from 'framer-motion';
 import { Sparkles, FileText, Share2, X } from 'lucide-react';
 
 interface WelcomePopupProps {
-    onClose: () => void;
+  onClose: () => void;
 }
 
 export const WelcomePopup = ({ onClose }: WelcomePopupProps) => {
-    return (
-        <motion.div
-            className="welcome-backdrop"
+  return (
+    <motion.div
+      className="welcome-backdrop"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <motion.div
+        className="welcome-modal glass-panel"
+        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+        transition={{ type: "spring", damping: 25, stiffness: 300, delay: 0.1 }}
+      >
+        <button className="close-btn" onClick={onClose}>
+          <X size={20} />
+        </button>
+
+        <div className="welcome-content">
+          <motion.div
+            className="welcome-logo-container"
+            initial={{ scale: 0, y: -20 }}
+            animate={{ scale: 1, y: 0 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.3 }}
+          >
+            <img src="/logo.png" alt="Logo" className="welcome-logo" />
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            Welcome to <span className="gradient-text">Our Store</span>
+          </motion.h2>
+
+          <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-        >
-            <motion.div
-                className="welcome-modal glass-panel"
-                initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                animate={{ scale: 1, opacity: 1, y: 0 }}
-                exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                transition={{ type: "spring", damping: 25, stiffness: 300, delay: 0.1 }}
-            >
-                <button className="close-btn" onClick={onClose}>
-                    <X size={20} />
-                </button>
+            transition={{ delay: 0.5 }}
+          >
+            Create professional, ATS-friendly resumes in minutes with our AI-powered platform.
+          </motion.p>
 
-                <div className="welcome-content">
-                    <motion.div
-                        className="icon-container"
-                        initial={{ scale: 0, rotate: -180 }}
-                        animate={{ scale: 1, rotate: 0 }}
-                        transition={{ type: "spring", delay: 0.3 }}
-                    >
-                        <span className="main-icon">🚀</span>
-                    </motion.div>
+          <div className="features-grid">
+            <FeatureItem
+              icon={<Sparkles size={20} />}
+              title="AI Powered"
+              desc="Smart suggestions for your content"
+              delay={0.6}
+            />
+            <FeatureItem
+              icon={<FileText size={20} />}
+              title="Modern Templates"
+              desc="Stand out with beautiful designs"
+              delay={0.7}
+            />
+            <FeatureItem
+              icon={<Share2 size={20} />}
+              title="Easy Export"
+              desc="Download PDF with one click"
+              delay={0.8}
+            />
+          </div>
 
-                    <motion.h2
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
-                    >
-                        Welcome to <span className="gradient-text">Our Store</span>
-                    </motion.h2>
+          <motion.button
+            className="get-started-btn"
+            onClick={onClose}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9 }}
+          >
+            Get Started Now
+          </motion.button>
+        </div>
+      </motion.div>
 
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.5 }}
-                    >
-                        Create professional, ATS-friendly resumes in minutes with our AI-powered platform.
-                    </motion.p>
-
-                    <div className="features-grid">
-                        <FeatureItem
-                            icon={<Sparkles size={20} />}
-                            title="AI Powered"
-                            desc="Smart suggestions for your content"
-                            delay={0.6}
-                        />
-                        <FeatureItem
-                            icon={<FileText size={20} />}
-                            title="Modern Templates"
-                            desc="Stand out with beautiful designs"
-                            delay={0.7}
-                        />
-                        <FeatureItem
-                            icon={<Share2 size={20} />}
-                            title="Easy Export"
-                            desc="Download PDF with one click"
-                            delay={0.8}
-                        />
-                    </div>
-
-                    <motion.button
-                        className="get-started-btn"
-                        onClick={onClose}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.9 }}
-                    >
-                        Get Started Now
-                    </motion.button>
-                </div>
-            </motion.div>
-
-            <style>{`
+      <style>{`
         .welcome-backdrop {
           position: fixed;
           top: 0;
@@ -140,20 +140,20 @@ export const WelcomePopup = ({ onClose }: WelcomePopupProps) => {
           color: var(--text-main);
         }
 
-        .icon-container {
-          width: 80px;
-          height: 80px;
-          background: linear-gradient(135deg, #FFD700, #FF8C00);
-          border-radius: 24px;
+        .welcome-logo-container {
+          width: 100px;
+          height: 100px;
+          margin: 0 auto 1.5rem;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin: 0 auto 1.5rem;
-          box-shadow: 0 10px 20px rgba(255, 140, 0, 0.3);
+          filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1));
         }
 
-        .main-icon {
-          font-size: 2.5rem;
+        .welcome-logo {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
         }
 
         h2 {
@@ -271,10 +271,9 @@ export const WelcomePopup = ({ onClose }: WelcomePopupProps) => {
             right: 0.75rem;
           }
 
-          .icon-container {
-            width: 64px;
-            height: 64px;
-            border-radius: 18px;
+          .welcome-logo-container {
+            width: 70px;
+            height: 70px;
             margin-bottom: 1rem;
           }
 
@@ -301,21 +300,21 @@ export const WelcomePopup = ({ onClose }: WelcomePopupProps) => {
           }
         }
       `}</style>
-        </motion.div>
-    );
+    </motion.div>
+  );
 };
 
 const FeatureItem = ({ icon, title, desc, delay }: { icon: any, title: string, desc: string, delay: number }) => (
-    <motion.div
-        className="feature-item"
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay }}
-    >
-        <div className="feature-icon">{icon}</div>
-        <div className="feature-text">
-            <h3>{title}</h3>
-            <span>{desc}</span>
-        </div>
-    </motion.div>
+  <motion.div
+    className="feature-item"
+    initial={{ opacity: 0, x: -20 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ delay }}
+  >
+    <div className="feature-icon">{icon}</div>
+    <div className="feature-text">
+      <h3>{title}</h3>
+      <span>{desc}</span>
+    </div>
+  </motion.div>
 );

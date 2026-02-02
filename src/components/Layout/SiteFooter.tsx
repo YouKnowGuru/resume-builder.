@@ -94,9 +94,14 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onNavigate }) => {
                 }
 
                 .footer-logo-image {
-                    height: 60px; /* Increased size */
+                    height: 85px; /* Increased for better visibility */
                     width: auto;
                     object-fit: contain;
+                    transition: transform 0.3s ease;
+                }
+
+                .footer-logo-image:hover {
+                    transform: scale(1.05);
                 }
 
                 .brand-tagline {
