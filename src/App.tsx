@@ -12,7 +12,7 @@ import { PrivacyPolicy } from './components/Legal/PrivacyPolicy';
 import { TermsOfService } from './components/Legal/TermsOfService';
 import { useResumeStore } from './store/useResumeStore';
 import { exportToPDF } from './utils/pdfExport';
-// import { PaymentModal } from './components/Payment/PaymentModal';
+import { PaymentModal } from './components/Payment/PaymentModal';
 import { Moon, Sun, Menu, X, Eye } from 'lucide-react';
 import { WelcomePopup } from './components/Layout/WelcomePopup';
 import { FloatingChatAssistant } from './components/Layout/FloatingChatAssistant';
@@ -26,7 +26,7 @@ function App() {
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const [currentPage, setCurrentPage] = useState<PageType>('home');
   const [showWelcome, setShowWelcome] = useState(true);
-  // const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [previewScale, setPreviewScale] = useState(1);
 
   const previewAreaRef = useRef<HTMLDivElement | null>(null);
@@ -45,7 +45,7 @@ function App() {
   }, [isDarkMode]);
 
   // Enhanced screenshot protection for fullscreen preview
-  /* useEffect(() => {
+  useEffect(() => {
     if (!isPreviewOpen) return;
 
     // Block common screenshot keyboard shortcuts
@@ -135,20 +135,20 @@ function App() {
       document.removeEventListener('touchstart', handleTouchStart);
       document.removeEventListener('touchmove', handleTouchMove);
     };
-  }, [isPreviewOpen]); */
+  }, [isPreviewOpen]);
 
   const handleExport = async () => {
     const filename = `${resume.personal.fullName.replace(/\s+/g, '_')}_Resume.pdf`;
     await exportToPDF('resume-preview', filename);
   };
 
-  /* const handleOpenPaymentModal = () => {
+  const handleOpenPaymentModal = () => {
     setIsPaymentModalOpen(true);
   };
 
   const handleClosePaymentModal = () => {
     setIsPaymentModalOpen(false);
-  }; */
+  };
 
   const shouldAutoScalePreview = useMemo(() => {
     // Only auto-scale in desktop split view. Fullscreen & mobile overlay should be 1:1.
@@ -242,7 +242,7 @@ function App() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="btn-primary desktop-only"
-                  onClick={handleExport}
+                  onClick={handleOpenPaymentModal}
                 >
                   <span>Export PDF</span>
                 </motion.button>
@@ -313,10 +313,10 @@ function App() {
               }}
             >
               <div className="preview-background-pattern"></div>
-              {/* {(isPreviewOpen || showMobilePreview) && (
-                <> */}
-              {/* Dense watermark grid covering entire screen */}
-              {/* <div className="preview-watermark preview-watermark-1">
+              {(isPreviewOpen || showMobilePreview) && (
+                <>
+                  {/* Dense watermark grid covering entire screen */}
+                  <div className="preview-watermark preview-watermark-1">
                     <span>PREVIEW ONLY · SCREENSHOTS RESTRICTED</span>
                   </div>
                   <div className="preview-watermark preview-watermark-2">
@@ -369,11 +369,11 @@ function App() {
                   </div>
                   <div className="preview-watermark preview-watermark-18">
                     <span>SCREENSHOTS BLOCKED</span>
-                  </div> */}
-              {/* Overlay protection layer */}
-              {/* <div className="preview-protection-overlay"></div>
+                  </div>
+                  {/* Overlay protection layer */}
+                  <div className="preview-protection-overlay"></div>
                 </>
-              )} */}
+              )}
               <motion.div
                 id="resume-preview"
                 className="preview-container"
@@ -386,7 +386,7 @@ function App() {
                 <Preview />
               </motion.div>
               {showMobilePreview && (
-                <button className="mobile-export-btn btn-primary mobile-only" onClick={handleExport}>
+                <button className="mobile-export-btn btn-primary mobile-only" onClick={handleOpenPaymentModal}>
                   Export PDF
                 </button>
               )}
@@ -399,7 +399,7 @@ function App() {
           <AnimatePresence>
             {showWelcome && <WelcomePopup onClose={() => setShowWelcome(false)} />}
           </AnimatePresence>
-          {/* <AnimatePresence>
+          <AnimatePresence>
             {isPaymentModalOpen && (
               <PaymentModal
                 amount={300}
@@ -407,7 +407,7 @@ function App() {
                 onVerified={handleExport}
               />
             )}
-          </AnimatePresence> */}
+          </AnimatePresence>
           <FloatingChatAssistant />
         </>
       )}
@@ -812,7 +812,7 @@ function App() {
           font-size: 1.4rem;
           font-weight: 700;
           text-transform: uppercase;
-          letter-spacing: 0.16em;
+          letter-spacing: 0.17em;
           color: #059669;
           transform: rotate(50deg);
           text-align: center;
@@ -918,6 +918,7 @@ function App() {
             touch-action: none;
           }
         }
+
 
         .preview-container {
           width: min(210mm, 100%);

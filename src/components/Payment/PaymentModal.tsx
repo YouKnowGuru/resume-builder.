@@ -2,33 +2,12 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CheckCircle2, RefreshCcw, UploadCloud, X } from 'lucide-react';
 
-const PAYMENT_DURATION_SECONDS = 120;
-const MIN_FILE_SIZE = 50 * 1024;
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
+const PAYMENT_DURATION_SECONDS = 300;
 const AMOUNT_TOLERANCE = 0.5;
-const MIN_OCR_TEXT_LENGTH = 20;
 const QR_IMAGE_SRC = '/mbob-qr.png.jpeg';
 
 const validExtensions = ['png', 'jpg', 'jpeg'];
 const OCR_LANGUAGE = 'eng';
-const PAYMENT_CONTEXT_PATTERNS = [
-  /\bpayment\b/i,
-  /\bpaid\b/i,
-  /\btransfer\b/i,
-  /\btxn\b/i,
-  /\btransaction\b/i,
-  /\bsuccess\b/i,
-  /\bcompleted\b/i,
-  /\bconfirmation\b/i,
-  /\breceipt\b/i
-];
-const AMOUNT_CONTEXT_PATTERNS = [
-  /\bamount\b/i,
-  /\bamt\b/i,
-  /\btotal\b/i,
-  /\bnu\.?\b/i,
-  /\bbtn\b/i
-];
 
 const formatTime = (totalSeconds: number) => {
   const minutes = Math.floor(totalSeconds / 60);
@@ -234,50 +213,6 @@ export const PaymentModal = ({ amount = 300, onClose, onVerified }: PaymentModal
     event.target.value = '';
   };
 
-  const validateImageDimensions = (image: HTMLImageElement) => {
-    if (image.naturalWidth < 300 || image.naturalHeight < 400) {
-      throw new Error('Screenshot dimensions are too small. Please upload a full payment screenshot from your bank app.');
-    }
-  };
-
-  const validateColorDistribution = (image: HTMLImageElement) => {
-    const canvas = document.createElement('canvas');
-    canvas.width = image.naturalWidth;
-    canvas.height = image.naturalHeight;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const { data } = imageData;
-
-    const stepSize = 4 * 10;
-    let sum = 0;
-    let count = 0;
-
-    for (let i = 0; i < data.length; i += stepSize) {
-      sum += data[i] + data[i + 1] + data[i + 2];
-      count += 3;
-    }
-
-    const safeCount = Math.max(count, 1);
-    const mean = sum / safeCount;
-    let varianceSum = 0;
-
-    for (let i = 0; i < data.length; i += stepSize) {
-      varianceSum += (data[i] - mean) ** 2;
-      varianceSum += (data[i + 1] - mean) ** 2;
-      varianceSum += (data[i + 2] - mean) ** 2;
-    }
-
-    const variance = varianceSum / safeCount;
-    const stdDev = Math.sqrt(variance);
-
-    if (stdDev < 15) {
-      throw new Error('This does not look like a valid payment screenshot. Please upload the actual screenshot from your bank app.');
-    }
-  };
-
   const handleVerify = async () => {
     if (!file) {
       setErrorMessage('Please upload a payment screenshot before verifying.');
@@ -297,31 +232,10 @@ export const PaymentModal = ({ amount = 300, onClose, onVerified }: PaymentModal
       return;
     }
 
-    if (file.size < MIN_FILE_SIZE) {
-      setErrorMessage('File is too small. Please upload a valid payment screenshot.');
-      return;
-    }
-
-    if (file.size > MAX_FILE_SIZE) {
-      setErrorMessage('File is too large. Max size is 10 MB.');
-      return;
-    }
-
     setStep('verifying');
     setErrorMessage(null);
 
     try {
-      const imageSource = previewUrl || URL.createObjectURL(file);
-      const image = await new Promise<HTMLImageElement>((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => resolve(img);
-        img.onerror = () => reject(new Error('Unable to read the screenshot. Please try another file.'));
-        img.src = imageSource;
-      });
-
-      validateImageDimensions(image);
-      validateColorDistribution(image);
-
       const { createWorker } = await import('tesseract.js');
       const worker = await createWorker(OCR_LANGUAGE);
       let extractedText = '';
@@ -333,22 +247,13 @@ export const PaymentModal = ({ amount = 300, onClose, onVerified }: PaymentModal
         await worker.terminate();
       }
 
-      if (!extractedText || extractedText.length < MIN_OCR_TEXT_LENGTH) {
-        throw new Error('Unable to read payment details from the screenshot. Please upload a clearer image.');
-      }
-
-      const hasPaymentContext = PAYMENT_CONTEXT_PATTERNS.some((pattern) => pattern.test(extractedText));
-      const hasAmountContext = AMOUNT_CONTEXT_PATTERNS.some((pattern) => pattern.test(extractedText));
-
-      if (!hasPaymentContext || !hasAmountContext) {
-        throw new Error('Payment details not detected. Please upload the full payment confirmation screenshot.');
-      }
-
+      // Verify amount (Nu 300)
       const parsedAmount = parseAmountFromText(extractedText, amount);
       if (parsedAmount === null || Math.abs(parsedAmount - amount) > AMOUNT_TOLERANCE) {
         throw new Error('Payment amount not detected. Please upload a full payment confirmation screenshot.');
       }
 
+      // Verify date and time
       const dateCandidates = parseDateCandidates(extractedText);
       const timeCandidates = parseTimeCandidates(extractedText);
       const dateTimeCandidates = buildDateTimeCandidates(dateCandidates, timeCandidates);
@@ -362,7 +267,7 @@ export const PaymentModal = ({ amount = 300, onClose, onVerified }: PaymentModal
       const withinWindow = dateTimeCandidates.some((candidate) => candidate >= windowStart && candidate <= windowEnd);
 
       if (!withinWindow) {
-        throw new Error('Payment date/time is outside the 2-minute window. Please retry and upload the latest payment screenshot.');
+        throw new Error('Payment date/time is outside the 5-minute window. Please retry and upload the latest payment screenshot.');
       }
 
       if (remainingRef.current <= 0) {
