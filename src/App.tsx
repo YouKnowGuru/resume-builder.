@@ -12,7 +12,7 @@ import { PrivacyPolicy } from './components/Legal/PrivacyPolicy';
 import { TermsOfService } from './components/Legal/TermsOfService';
 import { useResumeStore } from './store/useResumeStore';
 import { exportToPDF } from './utils/pdfExport';
-import { PaymentModal } from './components/Payment/PaymentModal';
+// import { PaymentModal } from './components/Payment/PaymentModal';
 import { Moon, Sun, Menu, X, Eye } from 'lucide-react';
 import { WelcomePopup } from './components/Layout/WelcomePopup';
 import { FloatingChatAssistant } from './components/Layout/FloatingChatAssistant';
@@ -26,7 +26,7 @@ function App() {
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const [currentPage, setCurrentPage] = useState<PageType>('home');
   const [showWelcome, setShowWelcome] = useState(true);
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  // const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [previewScale, setPreviewScale] = useState(1);
 
   const previewAreaRef = useRef<HTMLDivElement | null>(null);
@@ -142,13 +142,13 @@ function App() {
     await exportToPDF('resume-preview', filename);
   };
 
-  const handleOpenPaymentModal = () => {
+  /* const handleOpenPaymentModal = () => {
     setIsPaymentModalOpen(true);
   };
 
   const handleClosePaymentModal = () => {
     setIsPaymentModalOpen(false);
-  };
+  }; */
 
   const shouldAutoScalePreview = useMemo(() => {
     // Only auto-scale in desktop split view. Fullscreen & mobile overlay should be 1:1.
@@ -399,7 +399,7 @@ function App() {
           <AnimatePresence>
             {showWelcome && <WelcomePopup onClose={() => setShowWelcome(false)} />}
           </AnimatePresence>
-          <AnimatePresence>
+          {/* <AnimatePresence>
             {isPaymentModalOpen && (
               <PaymentModal
                 amount={300}
@@ -407,7 +407,7 @@ function App() {
                 onVerified={handleExport}
               />
             )}
-          </AnimatePresence>
+          </AnimatePresence> */}
           <FloatingChatAssistant />
         </>
       )}
